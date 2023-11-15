@@ -16,7 +16,7 @@ class Di_Zhi_Iter:
         current = yue + 2  # 因为时机是从寅宫开始的算一月，这里的1-12没有意义，只是为了好算
         if current > 12:
             current = current - 12
-        self.current = current
+        self.__current = current
 
     def update(self, current_location):
         """
@@ -29,28 +29,28 @@ class Di_Zhi_Iter:
         for k in di_zhi:
             dizhi = di_zhi.get(k)
             if dizhi == current_location:
-                self.current = int(k)
+                self.__current = int(k)
                 flag=False
                 break
         if flag:
             raise Exception("给定非有效地支")
 
     def next(self):
-        self.current += 1
-        if self.current > 12:
-            self.current = 1
+        self.__current += 1
+        if self.__current > 12:
+            self.__current = 1
 
-        return di_zhi.get(str(self.current))
+        return di_zhi.get(str(self.__current))
 
     def now(self):
-        return di_zhi.get(str(self.current))
+        return di_zhi.get(str(self.__current))
 
     def up(self):
-        self.current -= 1
-        if self.current < 1:
-            self.current = 12
+        self.__current -= 1
+        if self.__current < 1:
+            self.__current = 12
 
-        return di_zhi.get(str(self.current))
+        return di_zhi.get(str(self.__current))
 
 
 class Shi_Er_Zhi:
