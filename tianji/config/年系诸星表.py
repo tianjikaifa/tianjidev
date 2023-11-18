@@ -22,7 +22,7 @@ nian_gan_xing_biao = {
     "甲": {
         "禄存": "寅",
         "擎羊": "卯",
-        "陀螺": "丑",
+        "陀罗": "丑",
         "天魁": "丑",
         "天钺": "未",
         "天官": "未",
@@ -32,7 +32,7 @@ nian_gan_xing_biao = {
     "乙": {
         "禄存": "卯",
         "擎羊": "辰",
-        "陀螺": "寅",
+        "陀罗": "寅",
         "天魁": "子",
         "天钺": "申",
         "天官": "辰",
@@ -42,7 +42,7 @@ nian_gan_xing_biao = {
     "丙": {
         "禄存": "巳",
         "擎羊": "午",
-        "陀螺": "辰",
+        "陀罗": "辰",
         "天魁": "亥",
         "天钺": "酉",
         "天官": "巳",
@@ -52,7 +52,7 @@ nian_gan_xing_biao = {
     "丁": {
         "禄存": "午",
         "擎羊": "未",
-        "陀螺": "巳",
+        "陀罗": "巳",
         "天魁": "亥",
         "天钺": "酉",
         "天官": "寅",
@@ -62,7 +62,7 @@ nian_gan_xing_biao = {
     "戊": {
         "禄存": "巳",
         "擎羊": "午",
-        "陀螺": "辰",
+        "陀罗": "辰",
         "天魁": "丑",
         "天钺": "未",
         "天官": "卯",
@@ -72,7 +72,7 @@ nian_gan_xing_biao = {
     "己": {
         "禄存": "午",
         "擎羊": "未",
-        "陀螺": "巳",
+        "陀罗": "巳",
         "天魁": "子",
         "天钺": "申",
         "天官": "酉",
@@ -82,7 +82,7 @@ nian_gan_xing_biao = {
     "庚": {
         "禄存": "申",
         "擎羊": "酉",
-        "陀螺": "未",
+        "陀罗": "未",
         "天魁": "丑",
         "天钺": "未",
         "天官": "亥",
@@ -92,7 +92,7 @@ nian_gan_xing_biao = {
     "辛": {
         "禄存": "酉",
         "擎羊": "戌",
-        "陀螺": "申",
+        "陀罗": "申",
         "天魁": "午",
         "天钺": "寅",
         "天官": "酉",
@@ -102,7 +102,7 @@ nian_gan_xing_biao = {
     "壬": {
         "禄存": "亥",
         "擎羊": "子",
-        "陀螺": "戌",
+        "陀罗": "戌",
         "天魁": "卯",
         "天钺": "巳",
         "天官": "戌",
@@ -112,7 +112,7 @@ nian_gan_xing_biao = {
     "葵": {
         "禄存": "子",
         "擎羊": "丑",
-        "陀螺": "亥",
+        "陀罗": "亥",
         "天魁": "卯",
         "天钺": "巳",
         "天官": "午",
@@ -376,19 +376,19 @@ nian_zhi_xing_biao = {
 
 
 class Tian_Cai_Tian_Show_xing:
-    def __init__(self, yue, shi_chen, nian_zhi):
+    def __init__(self, yue, shi_zhi, nian_zhi):
         """
         根据月份，时辰和年支计算天才、天寿星位置
 
         :param yue:
-        :param shi_chen:用1-12表示十二个时辰
+        :param shi_zhi:表示时支
         :param nian_zhi:
         """
-        ming_shen = Ming_Shen_Gong(yue, shi_chen)
+        ming_shen = Ming_Shen_Gong(yue, shi_zhi)
         self.shen_gong = ming_shen.shen
 
         self.yu_gong_iter = Yu_Gong(ming_shen.ming)  # 获取所有宫所在的位置
-        self.__shi_chen = shi_chen
+        self.__shi_zhi = shi_zhi
         self.__nian_zhi = nian_zhi
         self.__tian_cai_gong_biao = {
             "子": "命",
@@ -433,7 +433,7 @@ class Tian_Cai_Tian_Show_xing:
             di_zhi_iter.next()
 
         if flag:
-            raise Exception("为能找到天寿星的位置，也许是参数错了，时辰是用1-12表示的")
+            raise Exception("未能找到天寿星的位置，也许是参数错了，时辰是用1-12表示的")
         return di_zhi_iter.now()
 
 
@@ -640,7 +640,7 @@ class Xun_Kong_Xing:
                 "壬": "戌",
                 "葵": "亥"},
         }
-        self.旬中 = biao.get(nian_zhi).get(nian_gan)
+        self.旬空 = biao.get(nian_zhi).get(nian_gan)
 
 
 """
@@ -680,7 +680,7 @@ if __name__ == '__main__':
                  "月德"]:
         print(star, [d.get(gan).get(star) for gan in di_zhi.values()])
     print("---" * 30, "\n确定天才、天寿星 \n")
-    t = Tian_Cai_Tian_Show_xing(5, 5, "子")
+    t = Tian_Cai_Tian_Show_xing(yue=5, shi_zhi="子", nian_zhi="子")
     print("天才星位置  {} ".format(t.get_tian_cai_loaction()))
     print("天寿星位置  {} ".format(t.get_tian_show_loaction()))
     print("---" * 30, "\n确定截路空亡星 \n")
@@ -690,7 +690,7 @@ if __name__ == '__main__':
     print("---" * 30, "\n确定旬中空亡星 \n")
     nian_zhi = "寅"
     xun_zhong = Xun_Kong_Xing(nian_gan, nian_zhi)
-    print(f"年干年支 {nian_gan}{nian_zhi}  \n旬中位置 {xun_zhong.旬中}  空亡位置 未知")
+    print(f"年干年支 {nian_gan}{nian_zhi}  \n旬中位置 {xun_zhong.旬空}  空亡位置 未知")
 
     print("---" * 30, "\n确定天伤天使星 \n")
     ming_gong = "亥"

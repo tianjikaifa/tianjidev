@@ -25,7 +25,7 @@ from tianji.config.十二支所属表 import Di_Zhi_Iter
 
 class CalculateLocation:
 
-    def __init__(self, start_location, day, star_name="文昌"):
+    def __init__(self, start_location, day, star_name="八座"):
         """
         :param start_location:  基于哪个星耀计算，给出这个星耀所在的宫
         :param day: 出生日

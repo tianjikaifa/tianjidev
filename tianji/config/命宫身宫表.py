@@ -11,21 +11,32 @@
 """
 
 # ----------------------------------------------------------------------------------------------------------------------
-from tianji.config.十二支所属表 import Di_Zhi_Iter
+from tianji.config.十二支所属表 import Di_Zhi_Iter, di_zhi
 
 
 class Ming_Shen_Gong:
 
-    def __init__(self, yue, shi):
+    def __init__(self, yue, shi_zhi):
         self.yue = yue
-        self.shi = shi
+        self.shi = shi_zhi
 
         ming = Di_Zhi_Iter(yue)
         shen = Di_Zhi_Iter(yue)
 
-        for i in range(1, shi):
-            ming.up()
-            shen.next()
+        flag = True
+        for i in range(1, 13):
+            dz = di_zhi.get(str(i))
+            if dz != self.shi:
+                ming.up()
+                shen.next()
+            else:
+                flag = False
+                break
+        if flag:
+            raise Exception("未能匹配时辰，查找命宫身宫失败")
+        # for i in range(1, shi_zhi):
+        #     ming.up()
+        #     shen.next()
 
         self.ming = ming.now()
         self.shen = shen.now()
@@ -72,14 +83,23 @@ class Shen_Zhu:
 
 
 if __name__ == '__main__':
-    from tianji.config.十二支所属表 import  di_zhi
 
-    for i in range(1, 13):
-        a = Ming_Shen_Gong(i, 12)
-        print(a.ming)
-        print(a.shen)
-        print(f"命主 {Ming_Zhu(a.ming).命主}")
-        print("_" * 20)
 
-    for zhi in di_zhi.values():
-        print(f"年支 {zhi} 身主 {Shen_Zhu(zhi).身主}")
+    for dz in di_zhi.values():
+        for i in range(1, 13):
+            a = Ming_Shen_Gong(i, dz)
+            print(f"{a.ming}  {a.shen}")
+        print("_" * 20,f"{dz}时")
+
+
+    # for i in range(1, 13):
+    #     a = Ming_Shen_Gong(i, "亥")
+    #     #print(f"月{i} 时{24} 命宫 {a.ming} 身宫 {a.shen}")
+    #     print(f"{a.ming}  {a.shen}")
+    #     print(f"命主 {Ming_Zhu(a.ming).命主}")
+    #     print("_" * 20)
+
+    # for zhi in di_zhi.values():
+    #     print(f"年支 {zhi} 身主 {Shen_Zhu(zhi).身主}")
+    # m=Ming_Shen_Gong(1,5)
+    # print(m.ming)

@@ -342,6 +342,11 @@ class Liu_Nian_Xing:
                 "病符": "戌"},
         }
 
+    def get_jiang_xing(self):
+        return self.jiang_xing_biao.get(self.__nian_zhi)
+
+    def get_sui_jian_biao(self):
+        return self.sui_jian_biao.get(self.__nian_zhi)
 
 if __name__ == '__main__':
     from tianji.config.十二支所属表 import di_zhi

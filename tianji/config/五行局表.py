@@ -26,7 +26,7 @@ class Wu_Xing:
         self.ming_gong = ming_gong
 
     def __get_info(self, num):
-        return num, wu_xing_list.get(num)
+        return [num, wu_xing_list.get(num)]
 
     def get_wu_xing(self):
         """

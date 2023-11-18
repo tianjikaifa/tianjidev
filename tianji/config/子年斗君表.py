@@ -18,27 +18,29 @@ from tianji.config.十二支所属表 import Di_Zhi_Iter, di_zhi
 
 
 class Dou_jun:
-    def __init__(self, yue, shi):
+    def __init__(self, yue, shi_zhi):
         """
         :param yue: 月份
-        :param shi: 时辰
+        :param shi_zhi: 时辰
         """
-        shi_chen_biao = {
-            1: "子",
-            2: "丑",
-            3: "寅",
-            4: "卯",
-            5: "辰",
-            6: "巳",
-            7: "午",
-            8: "未",
-            9: "申",
-            10: "酉",
-            11: "戌",
-            12: "亥"
-        }
+        # shi_chen_biao = {
+        #     1: "子",
+        #     2: "丑",
+        #     3: "寅",
+        #     4: "卯",
+        #     5: "辰",
+        #     6: "巳",
+        #     7: "午",
+        #     8: "未",
+        #     9: "申",
+        #     10: "酉",
+        #     11: "戌",
+        #     12: "亥"
+        # }
+        #
+        # self.__shi = shi_chen_biao.get(shi_zhi)
         self.__yue = yue
-        self.__shi = shi_chen_biao.get(shi)
+        self.__shi_zhi = shi_zhi
         # 子年斗君表
         biao = {
             1: {
@@ -198,7 +200,7 @@ class Dou_jun:
                 "戌": "亥",
                 "亥": "子"},
         }
-        self.start_location = biao.get(self.__yue).get(self.__shi)
+        self.start_location = biao.get(self.__yue).get(self.__shi_zhi)
         self.di_zhi_iter = Di_Zhi_Iter(-1)
         # 因为要按它起子，所以实际上要更新子的位置
         self.di_zhi_iter.update(self.start_location)

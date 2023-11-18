@@ -8,21 +8,22 @@
 """
 阳年生男女为阳男阳女，阴年生男女为阴男阴女
 """
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 class Shi_Gan:
-    def __init__(self,tian_gan,yin_yang,wu_xing):
-        self.tian_gan=tian_gan
-        self.yin_yang=yin_yang
-        self.wu_xing=wu_xing
+    def __init__(self, tian_gan, yin_yang, wu_xing):
+        self.tian_gan = tian_gan
+        self.yin_yang = yin_yang
+        self.wu_xing = wu_xing
+
 
 # 表示十天干的迭代器
 class Tian_Gan_Iter:
 
-
     def __init__(self, start):
         self.update(start)
-
 
     def next(self):
         self.current += 1
@@ -47,28 +48,28 @@ class Tian_Gan_Iter:
         :param start:
         :return:
         """
-        flag=True
+        flag = True
         for k in tian_gan:
             t = tian_gan.get(k)
             if t == start:
                 self.current = int(k)
-                flag=False
+                flag = False
                 break
         if flag:
             raise Exception("给定非有效天干{}".format(start))
 
 
-shi_gan_biao={
-    "甲":Shi_Gan("甲","阳","木"),
-    "乙":Shi_Gan("乙","阴","木"),
-    "丙":Shi_Gan("丙","阳","火"),
-    "丁":Shi_Gan("丁","阴","火"),
-    "戊":Shi_Gan("戊","阳","土"),
-    "己":Shi_Gan("己","阴","土"),
-    "庚":Shi_Gan("庚","阳","金"),
-    "辛":Shi_Gan("辛","阴","金"),
-    "壬":Shi_Gan("壬","阳","水"),
-    "葵":Shi_Gan("葵","阴","水"),
+shi_gan_biao = {
+    "甲": Shi_Gan("甲", "阳", "木"),
+    "乙": Shi_Gan("乙", "阴", "木"),
+    "丙": Shi_Gan("丙", "阳", "火"),
+    "丁": Shi_Gan("丁", "阴", "火"),
+    "戊": Shi_Gan("戊", "阳", "土"),
+    "己": Shi_Gan("己", "阴", "土"),
+    "庚": Shi_Gan("庚", "阳", "金"),
+    "辛": Shi_Gan("辛", "阴", "金"),
+    "壬": Shi_Gan("壬", "阳", "水"),
+    "葵": Shi_Gan("葵", "阴", "水"),
 }
 
 # 天干
@@ -84,3 +85,7 @@ tian_gan = {
     "9": "壬",
     "10": "葵",
 }
+
+
+
+
