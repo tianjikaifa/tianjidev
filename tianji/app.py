@@ -20,9 +20,6 @@ class AppScreen(FloatLayout):
     def __init__(self, **kwargs):
         super(AppScreen, self).__init__(**kwargs)
 
-        # for i in range(1,17):
-        #     self.add_widget(self.creat_gong(" "+str(i)),2)
-
 
 
 
@@ -30,7 +27,6 @@ class AppScreen(FloatLayout):
         b=Button(text=name)
         b.background_color =  (10, 10, 10)
         b.size=(400,350)
-
         return b
 
 
@@ -38,9 +34,10 @@ class AppScreen(FloatLayout):
 class PhoneApp(App):
 
     def build(self):
-        s=AppScreen()
-        s.size=(1700,1700)
-        return s
+        app=AppScreen()
+        app.size=(1700,1700)
+
+        return app
 
 
 
