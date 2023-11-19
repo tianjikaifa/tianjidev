@@ -8,46 +8,40 @@
 """
 模块说明
 """
-
-from kivy.uix.floatlayout import FloatLayout
+from kivy.lang import Builder
 from kivy.app import App
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
+from tianji.AppScreen import AppScreen
+import os
+from kivy.config import Config
 
+# Config.set("kivy", "encoding", "utf-8")
 
-class AppScreen(FloatLayout):
+Builder.load_string('''
+<MyScreen>
+    canvas.before:
+        Color:
+            #rgba: 0.8, 0.8, 0.8, 1
+            rgba: 1, 1, 1, 1
+            #rgba: 0, 0, 0, 1
+        Rectangle:
+            # self here refers to the widget i.e FloatLayout
+            pos: self.pos
+            size: self.size
 
-    def __init__(self, **kwargs):
-        super(AppScreen, self).__init__(**kwargs)
-
-
-
-
-    def  creat_gong(self,name):
-        b=Button(text=name)
-        b.background_color =  (10, 10, 10)
-        b.size=(400,350)
-        return b
-
+''')
 
 
 class PhoneApp(App):
 
     def build(self):
-        app=AppScreen()
-        app.size=(1700,1700)
+
+        app = AppScreen()
 
         return app
 
 
-
-
 if __name__ == '__main__':
-
-    app=PhoneApp()
-    app.title="天纪v1.0   --黄甫觉开发版本"
-    app.title="开发版本"
+    app = PhoneApp()
+    app.title = "天纪v1.0   --黄甫觉开发版本"
+    app.title = "开发版本"
     app.run()
-
-
-
