@@ -8,14 +8,12 @@
 """
 模块说明
 """
-import datetime
-import json
+
 # ----------------------------------------------------------------------------------------------------------------------
 import os
-from kivy.app import App
-from kivy import Config
+import datetime
+import json
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button, Label
@@ -24,7 +22,6 @@ from kivy.uix.checkbox import CheckBox
 from tianji.ui.Dialog import FileChooserPopup
 from tianji.ui.MingPan import PanTime, Pan
 from tianji.ui.font_set import set_font
-from kivy.uix.filechooser import FileChooser
 from kivy.config import Config
 
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
@@ -64,13 +61,13 @@ class MingPanDate(BoxLayout):
         user_operation.spacing = 20
         pai_pan_button = Button(text='排盘', on_release=self.start)
         bao_cun_button = Button(text='保存', on_release=self.save_user_info)
-        da_kai_button = Button(text='历史', on_release=self.open_from_file)
+        da__kai_button = Button(text='历史', on_release=self.open_from_file)
 
-        set_font(pai_pan_button, bao_cun_button, da_kai_button)
+        set_font(pai_pan_button, bao_cun_button, da__kai_button)
         pai_pan_button.color = (1, 1, 1, 1)
         bao_cun_button.color = (1, 1, 1, 1)
-        da_kai_button.color = (1, 1, 1, 1)
-        user_operation.add_widget(da_kai_button)
+        da__kai_button.color = (1, 1, 1, 1)
+        user_operation.add_widget(da__kai_button)
         user_operation.add_widget(bao_cun_button)
         user_operation.add_widget(pai_pan_button)
         root.add_widget(user_operation)
@@ -216,10 +213,11 @@ class MingPanDate(BoxLayout):
         else:
             self.gender = "男"
 
-        if len(self.user_info.get("日历").text) > 12:
-            ming_pan_time = self.get_ri_li_pan_time()
-        else:
+        if not self.user_info.get("农历").text == "":
             ming_pan_time = self.get_nong_li_pan_time()
+        else:
+            ming_pan_time = self.get_ri_li_pan_time()
+
         if not ming_pan_time is None:
             p = Pan(ming_pan_time, self.gender)
             self.pai_pan(p)
@@ -236,6 +234,11 @@ class MingPanDate(BoxLayout):
             self.date_error("尚未输入姓名")
             return
 
+        if self.gender_radio.get("女").active:
+            self.gender = "女"
+        else:
+            self.gender = "男"
+
         save_info = {
             "name": self.user_info.get("姓名").text,
             "gender": self.gender,
@@ -246,7 +249,8 @@ class MingPanDate(BoxLayout):
         # 生成文件名称
         filename = os.path.join(self.user_info_dir,
                                 f"{save_info.get('name')}_{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}.json")
-
+        if not os.path.exists(os.path.dirname(filename)):
+            os.makedirs(os.path.dirname(filename))
         # 保存字典对象
         with open(filename, 'w') as f:
             json.dump(save_info, f)
@@ -258,9 +262,9 @@ class MingPanDate(BoxLayout):
                 with open(file, 'r') as f:
                     user_info = json.load(f)
                     self.gender = user_info.get("gender")
+                    self.gender_radio.get(self.gender).active = True
                     self.user_info.get("农历").text = user_info.get("nong_li_time")
                     self.user_info.get("日历").text = ""
                     self.user_info.get("姓名").text = user_info.get("name")
-                    self.gender_radio.get(self.gender).active = True
 
         FileChooserPopup("", update_self, self.user_info_dir).open()

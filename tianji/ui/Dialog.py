@@ -11,14 +11,11 @@
 
 # ----------------------------------------------------------------------------------------------------------------------
 import os
-
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button, Label
 from kivy.uix.filechooser import FileChooserIconView
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
-
-from tianji.ui.font_set import set_font
+from kivy.uix.button import Button, Label
 
 
 class FileChooserPopup(Popup):
@@ -28,15 +25,15 @@ class FileChooserPopup(Popup):
         self.title = title
         self.fun = fun
 
-        #self.size_hint = (0.98, 0.98)
+        # self.size_hint = (0.98, 0.98)
         default_dir = "" if default_dir is None else default_dir
         layout = BoxLayout(orientation='vertical')
         btn_layout = BoxLayout()
-        height=0.2
+        height = 0.2
 
         select_button = Button(text='打开', on_release=self.select_file, size_hint_x=0.18, size_hint_y=height)
         chanel_button = Button(text='取消', on_release=self.chanel, size_hint_x=0.18, size_hint_y=height)
-        self.filechooser = FileChooserIconView(path=default_dir, dirselect=True,size_hint_y=0.9)
+        self.filechooser = FileChooserIconView(path=default_dir, dirselect=True, size_hint_y=0.9)
 
         set_font(select_button, chanel_button, self.filechooser)
         chanel_button.color = (1, 1, 1, 1)
@@ -45,12 +42,12 @@ class FileChooserPopup(Popup):
         btn_layout.add_widget(chanel_button)
         btn_layout.add_widget(Label(size_hint_x=0.8, size_hint_y=height))
         btn_layout.add_widget(select_button)
-        btn_layout.size_hint_y=height
+        btn_layout.size_hint_y = height
         layout.add_widget(btn_layout)
         layout.add_widget(self.filechooser)
         self.add_widget(layout)
 
-    def updae_tile(self,instance):
+    def updae_tile(self, instance):
         pass
 
     def select_file(self, instance):
