@@ -48,6 +48,7 @@ class GongScreen(BoxLayout):
         t_l = BoxLayout()
         t_r = BoxLayout()
         b = BoxLayout()
+
         b_l = BoxLayout()
         b_r = BoxLayout()
         b_m = BoxLayout()
