@@ -8,7 +8,7 @@
 """
 模块说明
 """
-
+from kivy import Config
 from kivy.lang import Builder
 from kivy.app import App
 
@@ -16,6 +16,7 @@ from kivy.app import App
 from tianji.ui.AppScreenUI import AppScreen
 from tianji.ui.Dialog import error_popup
 from tianji.ui.logModule import Logger
+
 
 __version__="1.0.1"
 
@@ -43,9 +44,12 @@ class PhoneApp(App):
     def build(self):
 
         app = AppScreen()
-        app.size = (2400, 1080)
 
         return app
+
+    def on_start(self):
+        self.root_window.size=(1000,780)
+
 
 """
 

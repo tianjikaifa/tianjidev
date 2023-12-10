@@ -23,7 +23,7 @@ from kivy.uix.checkbox import CheckBox
 from tianji.ui.PanTime import PanTime
 from tianji.ui.Dialog import FileChooserPopup, error_popup
 from tianji.ui.MingPan import Pan
-from tianji.ui.font_set import set_font
+from tianji.ui.font_set import set_font, font_size
 from tianji.ui.logModule import Logger
 
 from kivy.config import Config
@@ -53,13 +53,13 @@ class MingPanDate(BoxLayout):
         root.padding = 10
         gender_select = BoxLayout(orientation="horizontal",size_hint=(1,None),size=(200,50))
         root.add_widget(gender_select)
-        root.add_widget(self.mk_item("姓名"))
-        root.add_widget(self.mk_item("日历"))
-        root.add_widget(self.mk_item("农历"))
+        root.add_widget(self.make_date_item("姓名"))
+        root.add_widget(self.make_date_item("日历"))
+        root.add_widget(self.make_date_item("农历"))
 
         gender_item = BoxLayout(orientation="horizontal")
-        gender_item.add_widget(self.mk_gender_item("男"))
-        gender_item.add_widget(self.mk_gender_item("女"))
+        gender_item.add_widget(self.mkke_gender_item("男"))
+        gender_item.add_widget(self.mkke_gender_item("女"))
         gl = Label(text="性别",size_hint=(0.3,None),size=(200,50))
         set_font(gl)
         gender_select.add_widget(gl)
@@ -70,10 +70,10 @@ class MingPanDate(BoxLayout):
         operation1 = BoxLayout(orientation="vertical")
         operation2 = BoxLayout(orientation="vertical")
         # user_operation.spacing = 20
-        pai_pan_button = Button(text='排盘', on_release=self.start)
-        bao_cun_button = Button(text='保存', on_release=self.save_user_info)
-        da__kai_button = Button(text='历史', on_release=self.open_from_file)
-        zhuancunbutton = Button(text='转存', on_release=self.save_to_file)
+        pai_pan_button = Button(size_hint=(1,None),size=(100,50),text='排盘', on_release=self.start)
+        bao_cun_button = Button(size_hint=(1,None),size=(100,50),text='保存', on_release=self.save_user_info)
+        da__kai_button = Button(size_hint=(1,None),size=(100,50),text='历史', on_release=self.open_from_file)
+        zhuancunbutton = Button(size_hint=(1,None),size=(100,50),text='转存', on_release=self.save_to_file)
 
         set_font(pai_pan_button, bao_cun_button, da__kai_button, zhuancunbutton)
 
@@ -81,7 +81,8 @@ class MingPanDate(BoxLayout):
         bao_cun_button.color = (1, 1, 1, 1)
         da__kai_button.color = (1, 1, 1, 1)
         zhuancunbutton.color = (1, 1, 1, 1)
-        operation1.add_widget(zhuancunbutton)
+        #operation1.add_widget(zhuancunbutton)
+        operation1.add_widget(Label())
         operation1.add_widget(da__kai_button)
         operation2.add_widget(bao_cun_button)
         operation2.add_widget(pai_pan_button)
@@ -92,7 +93,9 @@ class MingPanDate(BoxLayout):
         # user_operation.add_widget(bao_cun_button)
         # user_operation.add_widget(pai_pan_button)
         root.add_widget(user_operation)
-        root.add_widget(Label())
+        l=Label()
+        l.size_hint_y=1
+        root.add_widget(l)
 
     def update_ming_pan_time(self, old):
         self.user_info.get("农历").text = old.user_info.get("农历").text
@@ -102,7 +105,7 @@ class MingPanDate(BoxLayout):
         self.gender_radio.get(old.gender).active = True
         self.user_info = old.user_info
 
-    def mk_gender_item(self, gender="男"):
+    def mkke_gender_item(self, gender="男"):
         root = BoxLayout(orientation="horizontal",size_hint=(1,None),size=(200,50))
         root.spacing = 10
         root.padding = 10
@@ -118,18 +121,19 @@ class MingPanDate(BoxLayout):
 
         return root
 
-    def mk_item(self, item_type="日历"):
+    def make_date_item(self, item_type="日历"):
         root = BoxLayout(orientation="horizontal",size_hint=(1,None),size=(200,50))
-        label = Label(text=f"{item_type}:",size_hint=(0.3,None))
+        label = Label(text=f"{item_type}: ",size_hint=(0.35,None),size=(200,50))
         input = TextInput(hint_text="1998-01-31-06")
         if item_type == "姓名":
             input = TextInput(hint_text="姓名", text="匿名")
         set_font(label, input)
-        input.font_size = 15
+        input.font_size = font_size-2
 
         root.add_widget(label)
         root.add_widget(input)
         self.user_info[item_type] = input
+
         if item_type == "农历":
             input.text = "1998-01-04-06"
         return root
@@ -273,13 +277,15 @@ class MingPanDate(BoxLayout):
         now = datetime.datetime.now()
 
         # 生成文件名称
-        filename = os.path.join(self.user_info_dir,
-                                f"{save_info.get('name')}_{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}.json")
+        filename = os.path.join(self.user_info_dir, f"{save_info.get('name')}.json")
+                                #f"{save_info.get('name')}_{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}.json")
+
         if not os.path.exists(os.path.dirname(filename)):
             os.makedirs(os.path.dirname(filename))
         # 保存字典对象
         with open(filename, 'w') as f:
             json.dump(save_info, f)
+            error_popup(f"保存成功，已保存至{os.path.basename(filename)}")
 
     def open_from_file(self, button, *args, **kwargs):
 
@@ -303,4 +309,4 @@ class MingPanDate(BoxLayout):
                 self.user_info.get("日历").text = ""
                 self.user_info.get("姓名").text = user_info.get("name")
         else:
-            error_popup("未选择记录或取下")
+            error_popup("未选择")

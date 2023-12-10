@@ -158,7 +158,7 @@ class Spinner(Button):
         if self._dropdown:
             self._dropdown.unbind(on_select=self._on_dropdown_select)
             self._dropdown.unbind(on_dismiss=self._close_dropdown)
-            self._dropdown.dismiss()
+            self._dropdown.no()
             self._dropdown = None
         cls = self.dropdown_cls
         if isinstance(cls, string_types):
@@ -218,4 +218,4 @@ class Spinner(Button):
             self._dropdown.open(self)
         else:
             if self._dropdown.attach_to:
-                self._dropdown.dismiss()
+                self._dropdown.no()

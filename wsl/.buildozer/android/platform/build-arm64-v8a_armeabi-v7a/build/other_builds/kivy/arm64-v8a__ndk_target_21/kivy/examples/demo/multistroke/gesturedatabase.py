@@ -141,7 +141,7 @@ class GestureDatabase(GridLayout):
     def perform_export(self, *l):
         path = self.export_popup.ids.filename.text
         if not path:
-            self.export_popup.dismiss()
+            self.export_popup.no()
             self.info_popup.text = 'Missing filename'
             self.info_popup.open()
             return
@@ -150,7 +150,7 @@ class GestureDatabase(GridLayout):
 
         self.save_selection_to_file(path)
 
-        self.export_popup.dismiss()
+        self.export_popup.no()
         self.info_popup.text = 'Gestures exported!'
         self.info_popup.open()
 
@@ -161,7 +161,7 @@ class GestureDatabase(GridLayout):
         self.import_gdb()
         self.info_popup.text = ("Imported %d gestures.\n" %
                                 (len(self.recognizer.db) - count))
-        self.import_popup.dismiss()
+        self.import_popup.no()
         self.info_popup.open()
 
     def save_selection_to_file(self, filename, *l):

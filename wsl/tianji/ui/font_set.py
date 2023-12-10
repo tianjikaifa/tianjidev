@@ -12,12 +12,16 @@
 # ----------------------------------------------------------------------------------------------------------------------
 import os
 
+from kivy.uix.popup import Popup
+
+font_size=18
 def set_font(*objs):
     for obj in objs:
         obj.font_name = os.path.join(os.path.dirname(__file__), "../config", "font", "NotoSansSC-VariableFont_wght.ttf")
         obj.color = (0, 0, 0, 1)
-        obj.font_size = 14
+        obj.font_size = font_size
         obj.bold = True
-
+        if isinstance(obj,Popup):
+            obj.title_font=os.path.join(os.path.dirname(__file__), "../config", "font", "NotoSansSC-VariableFont_wght.ttf")
 
 
