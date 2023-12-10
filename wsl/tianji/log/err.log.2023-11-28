@@ -1,0 +1,2 @@
+2023-11-28 00:19:40,788 - D:\pycharm\pythonProject1\wsl\tianji\ui\SetingUI.py[line:136] - ERROR: module 'tianji.ui.PanTime' has no attribute 'solar_to_lunar'
+2023-11-28 00:21:33,242 - D:\pycharm\pythonProject1\wsl\tianji\ui\SetingUI.py[line:136] - ERROR: module 'tianji.ui.PanTime' has no attribute 'solar_to_lunar'

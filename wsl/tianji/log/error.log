@@ -1,0 +1,27 @@
+2023-12-01 10:48:25,656 - D:\pycharm\pythonProject1\wsl\main.py[line:54] - DEBUG: name 'l' is not defined
+2023-12-01 10:49:25,653 - D:\pycharm\pythonProject1\wsl\main.py[line:54] - ERROR: name 'l' is not defined
+2023-12-01 10:52:39,737 - D:\pycharm\pythonProject1\wsl\main.py[line:54] - ERROR: name 'l' is not defined
+2023-12-01 10:52:44,896 - D:\pycharm\pythonProject1\wsl\main.py[line:54] - ERROR: name 'l' is not defined
+2023-12-01 10:59:56,571 - D:\pycharm\pythonProject1\wsl\main.py[line:54] - ERROR: 'NoneType' object has no attribute 'export_to_png'
+2023-12-01 12:56:23,451 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: 'NoneType' object has no attribute 'export_to_png'
+2023-12-01 13:03:44,256 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: 'tuple' object has no attribute 'fbind'
+2023-12-01 13:06:56,419 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: 'NoneType' object has no attribute 'export_to_png'
+2023-12-01 13:16:07,860 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: 'function' object has no attribute 'grab_current'
+2023-12-01 13:16:27,413 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: 'function' object has no attribute 'grab_current'
+2023-12-01 13:17:49,214 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: 'function' object has no attribute 'is_mouse_scrolling'
+2023-12-01 13:22:44,486 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: MingPanDate.error_popup.<locals>.close() missing 1 required positional argument: 'btn'
+2023-12-01 13:23:53,486 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: MingPanDate.error_popup.<locals>.close() missing 1 required positional argument: 'btn'
+2023-12-01 13:24:29,714 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: MingPanDate.error_popup.<locals>.close() missing 1 required positional argument: 'btn'
+2023-12-01 13:28:10,652 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: 'tuple' object is not callable
+2023-12-01 13:29:03,722 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: MingPanDate.error_popup.<locals>.<lambda>() missing 1 required positional argument: 'b'
+2023-12-01 13:37:52,464 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: MingPanDate.error_popup.<locals>.<lambda>() missing 1 required positional argument: 'b'
+2023-12-01 13:39:10,357 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: MingPanDate.error_popup.<locals>.<lambda>() missing 1 required positional argument: 'b'
+2023-12-01 14:22:16,110 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: 'FileChooserPopup' object has no attribute 'delete_file'
+2023-12-01 19:32:43,873 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: 'MingPanDate' object has no attribute 'error_popup'
+2023-12-01 19:33:42,758 - D:\pycharm\pythonProject1\wsl\main.py[line:55] - ERROR: error_popup.<locals>.<lambda>() missing 1 required positional argument: 'b'
+2023-12-01 19:34:42,342 - D:\pycharm\pythonProject1\wsl\main.py[line:58] - ERROR: error_popup.<locals>.<lambda>() missing 1 required positional argument: 'b'
+2023-12-01 19:35:21,574 - D:\pycharm\pythonProject1\wsl\main.py[line:56] - ERROR: error_popup.<locals>.<lambda>() missing 1 required positional argument: 'b'
+2023-12-01 19:38:36,618 - D:\pycharm\pythonProject1\wsl\main.py[line:56] - ERROR: error_popup.<locals>.<lambda>() missing 1 required positional argument: 'b'
+2023-12-01 19:38:54,091 - D:\pycharm\pythonProject1\wsl\main.py[line:56] - ERROR: error_popup.<locals>.<lambda>() missing 1 required positional argument: 'b'
+2023-12-01 19:40:37,197 - D:\pycharm\pythonProject1\wsl\main.py[line:56] - ERROR: error_popup.<locals>.<lambda>() missing 1 required positional argument: 'b'
+2023-12-01 20:46:25,945 - D:\pycharm\pythonProject1\wsl\main.py[line:56] - ERROR: 'MingPanDate' object has no attribute 'set_widget_height'

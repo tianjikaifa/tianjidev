@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">紫薇斗数</string>
+    <string name="private_version">9ef80b1c7c048ce337eb4ac3b41d51046296ec10</string>
+    <string name="presplash_color">#000000</string>
+    <string name="urlScheme">kivy</string>
+</resources>

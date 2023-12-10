@@ -1,0 +1,6 @@
+2023-12-01 10:20:48,819 - D:\pycharm\pythonProject1\wsl\tianji\ui\SetingUI.py[line:144] - ERROR: invalid literal for int() with base 10: ''
+2023-12-01 10:20:53,442 - D:\pycharm\pythonProject1\wsl\tianji\ui\SetingUI.py[line:144] - ERROR: invalid literal for int() with base 10: ''
+2023-12-01 10:20:53,442 - D:\pycharm\pythonProject1\wsl\tianji\ui\SetingUI.py[line:144] - ERROR: invalid literal for int() with base 10: ''
+2023-12-01 11:08:32,857 - D:\pycharm\pythonProject1\wsl\tianji\ui\SetingUI.py[line:152] - ERROR: invalid literal for int() with base 10: ''
+2023-12-01 11:09:57,436 - D:\pycharm\pythonProject1\wsl\tianji\ui\SetingUI.py[line:197] - ERROR: only 30 days in lunar year 1998 month 1
+2023-12-01 11:11:45,510 - D:\pycharm\pythonProject1\wsl\tianji\ui\SetingUI.py[line:198] - ERROR: only 30 days in lunar year 1998 month 1
