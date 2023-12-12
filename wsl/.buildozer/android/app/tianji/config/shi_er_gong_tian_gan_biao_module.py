@@ -39,8 +39,8 @@ class Shi_Er_Gong_Tian_Gan:
             return Tian_Gan_Iter("己")
         if self.nian_gan == "丁" or self.nian_gan == "壬":
             return Tian_Gan_Iter("辛")
-        if self.nian_gan == "戊" or self.nian_gan == "葵":
-            return Tian_Gan_Iter("葵")
+        if self.nian_gan == "戊" or self.nian_gan == "癸":
+            return Tian_Gan_Iter("癸")
 
 
 if __name__ == '__main__':

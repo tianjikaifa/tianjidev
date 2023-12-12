@@ -162,7 +162,7 @@ class Wu_Xing:
                 "戌": self.__get_info(2),
                 "亥": self.__get_info(2),
             },
-            "葵": {
+            "癸": {
                 "子": self.__get_info(4),
                 "丑": self.__get_info(4),
                 "寅": self.__get_info(2),

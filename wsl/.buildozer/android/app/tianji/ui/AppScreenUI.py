@@ -15,7 +15,7 @@ from kivy.uix.label import Label
 
 
 from tianji.ui.BaseUI import MyScreen
-from tianji.ui.SetingUI import MingPanDate
+from tianji.ui.UserUI import MingPanDate
 from tianji.ui.MingPan import  Gong
 from tianji.ui.GongScreenUI import GongScreen
 

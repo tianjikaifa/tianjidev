@@ -77,7 +77,7 @@ class GongScreen(BoxLayout):
 
         with self.canvas.before:
             Color(0, 0, 0, 1)  # set the color to red
-            self.rect = Line(rectangle=(self.x, self.y, self.width, self.height), width=1.5)
+            self.rect = Line(rectangle=(self.x, self.y, self.width, self.height), width=1)
 
     def _update_rect(self, instance, value):
         self.rect.rectangle = (self.x, self.y, self.width, self.height)

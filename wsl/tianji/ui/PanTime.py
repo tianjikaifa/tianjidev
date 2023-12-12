@@ -8,8 +8,7 @@
 """
 模块说明
 """
-
-
+import datetime
 
 # ----------------------------------------------------------------------------------------------------------------------
 from lunar_python import Lunar, Solar
@@ -34,6 +33,7 @@ class PanTime:
         self.ri = ri
         self.shi = shi
         self.day_info =Lunar(nian,yue,ri,shi,0,0)
+
 
 
     def get_ba_zi(self):
@@ -62,6 +62,13 @@ class PanTime:
         m=self.day_info.getSolar().getMonth()
         d=self.day_info.getSolar().getDay()
         return y, m, d
+
+
+    def liu_nian_ba_zi(self):
+        t=datetime.datetime.now()
+        y,m,d= PanTime.solar_to_lunar(t.year,t.month,t.day)
+        t=PanTime(y,m,d,3)
+        return t.get_ba_zi()
 
     @staticmethod
     def solar_to_lunar(nian, yue, ri):

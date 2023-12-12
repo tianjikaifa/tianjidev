@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 # @Time    : 2023/11/19 18:21
 # @Author  : huangfujue
-# @File    : SetingUI.py
+# @File    : UserUI.py
 # @Date    : 2023/11/19 
 """
 模块说明
@@ -13,6 +13,8 @@
 import os
 import datetime
 import json
+import traceback
+
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
@@ -20,7 +22,7 @@ from kivy.uix.button import Button, Label
 from kivy.uix.checkbox import CheckBox
 
 from tianji.ui.PanTime import PanTime
-from tianji.ui.Dialog import FileChooserPopup
+from tianji.ui.Dialog import OpenFileDialog, message_popup
 from tianji.ui.MingPan import Pan
 
 
@@ -31,6 +33,10 @@ from tianji.ui.logModule import Logger
 
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
+dir_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "log")
+if not os.path.exists(dir_path):
+    os.makedirs(dir_path)
+log = Logger(os.path.join(dir_path, "MingPanDate.log")).logger
 
 class RadioButton(CheckBox):
     def _do_press(self):
@@ -80,6 +86,7 @@ class MingPanDate(BoxLayout):
     def update_ming_pan_time(self, old):
         self.user_info.get("农历").text = old.user_info.get("农历").text
         self.user_info.get("日历").text = old.user_info.get("日历").text
+        self.user_info.get("姓名").text = old.user_info.get("姓名").text
         self.pai_pan = old.pai_pan
         self.gender = old.gender
         self.gender_radio.get(old.gender).active = True
@@ -128,12 +135,7 @@ class MingPanDate(BoxLayout):
             self.user_info.get("农历").text = (f"{y}-{m}-{d}-{shi}")
             return pt
         except Exception as E:
-            self.date_error(str(E))
-            self.user_info.get("日历").text = ""
-            dir_path=os.path.join(os.path.dirname(os.path.dirname(__file__)),"log")
-            if not os.path.exists(dir_path):
-                os.makedirs(dir_path)
-            log = Logger(os.path.join(dir_path,"err.log")).logger
+            message_popup(str(E))
             log.error(E)
 
             return None
@@ -173,12 +175,8 @@ class MingPanDate(BoxLayout):
             self.user_info.get("日历").text = (f"{y}-{m}-{d}-{shi}")
             return pt
         except Exception as E:
-            self.date_error(str(E))
-            self.user_info.get("农历").text = ""
-            dir_path=os.path.join(os.path.dirname(os.path.dirname(__file__)),"log")
-            if not os.path.exists(dir_path):
-                os.makedirs(dir_path)
-            log = Logger(os.path.join(dir_path,"err.log")).logger
+            E = traceback.format_exc()
+            message_popup(E)
             log.error(E)
             return None
 
@@ -201,29 +199,9 @@ class MingPanDate(BoxLayout):
         #
         #     return None
 
-    def date_error(self, error=None):
-        title = '你的输入有误，请检查 ' if error is None else error
-        contex = BoxLayout(orientation="vertical")
-        label = Label(text=title)
-        button = Button(text='确定', size_hint_y=0.2, on_release=lambda button: popup.dismiss())
-        contex.add_widget(label)
-        contex.add_widget(button)
-        popup = Popup(title="error",
-                      content=contex,
-                      size_hint=(None, None),
-                      size=(400, 400)
-
-                      )
-
-        set_font(button, label, contex, popup)
-        label.color = (1, 1, 1, 1)
-        button.color = (1, 1, 1, 1)
-        popup.open()
-
-
     def start(self, button, *args, **kwargs):
         if self.pai_pan is None:
-            self.date_error("尚未传递排盘方法")
+            message_popup("尚未传递排盘方法")
             return
 
         if self.gender_radio.get("女").active:
@@ -245,11 +223,11 @@ class MingPanDate(BoxLayout):
     def save_user_info(self, button, *args, **kwargs):
 
         if self.user_info.get("农历").text.strip() == "":
-            self.date_error("尚未排盘或农历生日有误")
+            message_popup("尚未排盘或农历生日有误")
             return
 
         if self.user_info.get("姓名").text.strip() == "":
-            self.date_error("尚未输入姓名")
+            message_popup("尚未输入姓名")
             return
 
         if self.gender_radio.get("女").active:
@@ -285,4 +263,4 @@ class MingPanDate(BoxLayout):
                     self.user_info.get("日历").text = ""
                     self.user_info.get("姓名").text = user_info.get("name")
 
-        FileChooserPopup("", update_self, self.user_info_dir).open()
+        OpenFileDialog("", update_self, self.user_info_dir).open()

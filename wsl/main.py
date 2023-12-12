@@ -8,20 +8,17 @@
 """
 模块说明
 """
-from kivy import Config
+
+import traceback
+
 from kivy.lang import Builder
 from kivy.app import App
 
-
 from tianji.ui.AppScreenUI import AppScreen
-from tianji.ui.Dialog import error_popup
+from tianji.ui.Dialog import YesNoPopup
 from tianji.ui.logModule import Logger
 
-
-__version__="1.0.1"
-
-
-
+__version__ = "1.0.1"
 
 Builder.load_string('''
 <MyScreen>
@@ -36,19 +33,43 @@ Builder.load_string('''
             pos: self.pos
             size: self.size
 
+
+
+<Button>:
+    background_color: 
+        0.9, 0.9, 0.9, 1
+    background_normal: 
+        ''
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20]
+    color: 
+        0, 0, 0, 1
+    padding: 10
+
+
 ''')
+
+
+class ErrorExitPopUp(App):
+    def __init__(self, msg, **kwargs):
+        super().__init__(**kwargs)
+        YesNoPopup(msg, operate_fun=exit).open()
 
 
 class PhoneApp(App):
 
     def build(self):
-
         app = AppScreen()
 
         return app
 
     def on_start(self):
-        self.root_window.size=(1000,780)
+        self.root_window.size = (1000, 780)
 
 
 """
@@ -60,10 +81,11 @@ class PhoneApp(App):
 
 try:
     app = PhoneApp()
-    app.title = "天纪-紫薇斗数 v1.0  --测试版本"
+    app.title = "天纪 v1.0  --测试版本"
     app.run()
 except Exception as E:
-    E=str(E)
+    E = traceback.format_exc()
     log = Logger('./tianji/log/error.log', level='debug').logger
     log.error(E)
-    error_popup(E)
+    app = ErrorExitPopUp(E)
+    app.run()
