@@ -49,7 +49,7 @@
                  android:allowBackup="true"
                  
                  
-                 android:theme="@android:style/Theme.NoTitleBar"
+                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                  android:hardwareAccelerated="true"
                  android:extractNativeLibs="true" >
         

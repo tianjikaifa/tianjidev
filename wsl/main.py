@@ -11,12 +11,14 @@
 
 import traceback
 
+import kivy
 from kivy.lang import Builder
 from kivy.app import App
 
 from tianji.ui.AppScreenUI import AppScreen
-from tianji.ui.Dialog import YesNoPopup
+from tianji.ui.DialogScreenUI import YesNoPopup
 from tianji.ui.logModule import Logger
+
 
 __version__ = "1.0.1"
 
@@ -37,7 +39,7 @@ Builder.load_string('''
 
 <Button>:
     background_color: 
-        0.9, 0.9, 0.9, 1
+        0.95, 0.95, 0.95, 1
     background_normal: 
         ''
     canvas.before:
@@ -64,12 +66,16 @@ class ErrorExitPopUp(App):
 class PhoneApp(App):
 
     def build(self):
-        app = AppScreen()
+        #app = AppScreen(self.stop)
+        app = AppScreen(self)
 
         return app
 
     def on_start(self):
-        self.root_window.size = (1000, 780)
+
+        if kivy.platform == "win":
+            self.root_window.size = (500, 960)
+
 
 
 """

@@ -42,6 +42,7 @@ class Star_Info:
         self.wuxing_list = wuxing_list
         self.dou_fen = dou_fen
         self.zhu_hua = zhu_hua
+        self.info=f"等级:{level}\n 星耀:\n{name}\n 所属:\n{dou_fen}\n 主化:\n{zhu_hua}\n 五行:\n{''.join(wuxing_list)}\n"
 
 
 class Si_Hua_Xing(Star_Info):

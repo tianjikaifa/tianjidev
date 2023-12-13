@@ -11,6 +11,9 @@
 """
 
 # ----------------------------------------------------------------------------------------------------------------------
+import json
+import os
+
 from tianji.config.shi_er_di_zhi_biao_module import Di_Zhi_Iter, di_zhi
 
 
@@ -44,42 +47,50 @@ class Ming_Shen_Gong:
 
 class Ming_Zhu:
     def __init__(self, ming_gong):
-        biao = {
-            "子": "贪狼",
-            "丑": "巨门",
-            "寅": "禄存",
-            "卯": "文曲",
-            "辰": "廉贞",
-            "巳": "武曲",
-            "午": "破军",
-            "未": "武曲",
-            "申": "廉贞",
-            "酉": "文曲",
-            "戌": "禄存",
-            "亥": "巨门",
-        }
+        # biao = {
+        #     "子": "贪狼",
+        #     "丑": "巨门",
+        #     "寅": "禄存",
+        #     "卯": "文曲",
+        #     "辰": "廉贞",
+        #     "巳": "武曲",
+        #     "午": "破军",
+        #     "未": "武曲",
+        #     "申": "廉贞",
+        #     "酉": "文曲",
+        #     "戌": "禄存",
+        #     "亥": "巨门",
+        # }
+        json_file = os.path.join(os.path.dirname(__file__), "jsonfile", "ming_zhu_biao.json")
+        ming_zhu_biao = None
+        with open(json_file, "r", encoding="utf-8") as f:
+            ming_zhu_biao = json.load(f)
         self.__ming_gong = ming_gong
-        self.命主 = biao.get(ming_gong)
+        self.命主 = ming_zhu_biao.get(ming_gong)
 
 
 class Shen_Zhu:
     def __init__(self, nian_zhi):
         self.__nian_zhi = nian_zhi
-        biao = {
-            "子": "火星",
-            "丑": "天相",
-            "寅": "天梁",
-            "卯": "天同",
-            "辰": "文昌",
-            "巳": "天机",
-            "午": "火星",
-            "未": "天相",
-            "申": "天梁",
-            "酉": "天同",
-            "戌": "文昌",
-            "亥": "天机",
-        }
-        self.身主 = biao.get(nian_zhi)
+        # biao = {
+        #     "子": "火星",
+        #     "丑": "天相",
+        #     "寅": "天梁",
+        #     "卯": "天同",
+        #     "辰": "文昌",
+        #     "巳": "天机",
+        #     "午": "火星",
+        #     "未": "天相",
+        #     "申": "天梁",
+        #     "酉": "天同",
+        #     "戌": "文昌",
+        #     "亥": "天机",
+        # }
+        json_file = os.path.join(os.path.dirname(__file__), "jsonfile", "shen_zhu_biao.json")
+        shen_zhu_biao = None
+        with open(json_file, "r", encoding="utf-8") as f:
+            shen_zhu_biao = json.load(f)
+        self.身主 = shen_zhu_biao.get(nian_zhi)
 
 
 if __name__ == '__main__':

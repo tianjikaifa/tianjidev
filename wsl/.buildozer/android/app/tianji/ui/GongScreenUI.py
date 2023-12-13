@@ -18,13 +18,14 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Rectangle, Color, Line
 from kivy.uix.button import Button, Label
 
-from tianji.ui.font_set import set_font
+from tianji.ui.FontSetModule import set_font
 
 
 class GongScreen(BoxLayout):
     def __init__(self, gong_obj=None, **kwargs):
         kwargs["orientation"] = "vertical"
         kwargs["padding"] = 10
+
         super(GongScreen, self).__init__(**kwargs)
 
         self.other_info = [
@@ -39,7 +40,8 @@ class GongScreen(BoxLayout):
             gong_obj.da_xian,  # 大流年
             gong_obj.name,  # 宫所主的名称
         ]
-
+        if gong_obj.shen_gong:
+            self.gong_info.append("身宫")
         # 表示这个宫的不同等级的星耀
         self.stars = gong_obj.stars
 
@@ -60,7 +62,9 @@ class GongScreen(BoxLayout):
         self.add_widget(t)
         self.add_widget(m)
         self.add_widget(b)
-
+        t.size_hint_y=0.5
+        m.size_hint_y=0.15
+        b.size_hint_y=0.35
         dui_qi_fang_shi = "vertical"  # horizontal
         t_l.add_widget(StarListScreen(star_list=self.stars.get("甲"), orientation=dui_qi_fang_shi))
         t_r.add_widget(StarListScreen(star_list=self.stars.get("乙"), orientation=dui_qi_fang_shi))
@@ -73,7 +77,7 @@ class GongScreen(BoxLayout):
 
         with self.canvas.before:
             Color(0, 0, 0, 1)  # set the color to red
-            self.rect = Line(rectangle=(self.x, self.y, self.width, self.height), width=1.5)
+            self.rect = Line(rectangle=(self.x, self.y, self.width, self.height), width=1)
 
     def _update_rect(self, instance, value):
         self.rect.rectangle = (self.x, self.y, self.width, self.height)

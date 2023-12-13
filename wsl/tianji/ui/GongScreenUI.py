@@ -12,13 +12,13 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-import os
-from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-from kivy.graphics import Rectangle, Color, Line
+from kivy.graphics import Color, Line
 from kivy.uix.button import Button, Label
 
-from tianji.ui.font_set import set_font
+from tianji.config.xing_chen_biao_module import dou_shu_stars
+from tianji.ui.DialogScreenUI import message_popup
+from tianji.ui.FontSetModule import set_font
 
 
 class GongScreen(BoxLayout):
@@ -62,9 +62,9 @@ class GongScreen(BoxLayout):
         self.add_widget(t)
         self.add_widget(m)
         self.add_widget(b)
-        t.size_hint_y=0.5
-        m.size_hint_y=0.15
-        b.size_hint_y=0.35
+        t.size_hint_y = 0.5
+        m.size_hint_y = 0.15
+        b.size_hint_y = 0.35
         dui_qi_fang_shi = "vertical"  # horizontal
         t_l.add_widget(StarListScreen(star_list=self.stars.get("甲"), orientation=dui_qi_fang_shi))
         t_r.add_widget(StarListScreen(star_list=self.stars.get("乙"), orientation=dui_qi_fang_shi))
@@ -85,13 +85,31 @@ class GongScreen(BoxLayout):
 
 class StarListScreen(BoxLayout):
     def __init__(self, star_list, **kwargs):
-        kwargs["spacing"] = 10
+        #kwargs["spacing"] = 10
 
         self.align = ('left', 'top')
         super(StarListScreen, self).__init__(**kwargs)
         for star in star_list:
-            button = Label(text=star)
+            res=self.find_star(star)
+            if  res[0]:
+                button = Button(text=star)
+                button.on_release =lambda : message_popup(res[1].info)
+            else:
+                button = Label(text=star)
             set_font(button)
             button.font_blended = True
-            button.color = (0, 0, 0, 1)
+            button.background_color = (1, 1, 1, 1)
             self.add_widget(button)
+
+    def find_star(self, star=""):
+        flag = False
+        star_info=None
+        for star_name in dou_shu_stars:
+            if star.find(star_name) > -1:
+                flag = True
+                star_info=dou_shu_stars.get(star_name)
+                break
+
+        return [flag,star_info]
+
+

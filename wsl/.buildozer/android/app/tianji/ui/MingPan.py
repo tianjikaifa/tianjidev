@@ -3,26 +3,28 @@
 # ----------------------------------------------------------------------------------------------------------------------
 # @Time    : 2023/11/15 14:55
 # @Author  : huangfujue
-# @File    : MingPan.py
+# @File    : MingPanScreenUI.py
 # @Date    : 2023/11/15 
 """
 表示紫薇斗数的十二个宫的容器
 """
-# ----------------------------------------------------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------------------------------------------------
+from datetime import datetime
+from tianji.config.gong import Gong
 from tianji.config.zhu_xing_biao_module import bei_dou_zhu_xing_biao, nan_dou_zhu_xing_biao
 from tianji.config.wu_xing_jv_biao_module import Wu_Xing
 from tianji.config.yu_gong_biao_module import Yu_Gong
 from tianji.config.shi_er_gong_tian_gan_biao_module import Shi_Er_Gong_Tian_Gan
-from tianji.config.shi_er_di_zhi_biao_module import di_zhi, Di_Zhi_Iter
+from tianji.config.shi_er_di_zhi_biao_module import di_zhi
 from tianji.config.shi_gan_biao_module import shi_gan_biao
 from tianji.config.bo_shi_shi_er_xing_module import Bo_Shi_Shi_Er_Xing
 from tianji.config.ming_gong_shen_gong_module import Ming_Shen_Gong, Ming_Zhu, Shen_Zhu
 from tianji.config.da_xian_module import Da_Liu_Nian
 from tianji.config.zi_nian_dou_jun_biao_module import Dou_jun
-from tianji.config.nian_xi_zhu_xing_biao_module import nian_gan_xing_biao, si_hua_xing_biao, nian_zhi_xing_biao, Tian_Cai_Tian_Show_xing
+from tianji.config.nian_xi_zhu_xing_biao_module import nian_gan_xing_biao, si_hua_xing_biao, nian_zhi_xing_biao, \
+    Tian_Cai_Tian_Show_xing
 from tianji.config.nian_xi_zhu_xing_biao_module import Jie_Kong_Xing, Xun_Kong_Xing, Tian_Shang_Tian_Shi_Xing
-from tianji.config.liang_du_biao_module import liang_du_biao
 from tianji.config.ri_xi_zhu_xing_biao_module import CalculateLocation
 from tianji.config.shi_xi_zhu_xing_biao_module import shi_chen_xing_biao, huo_ling_xing_biao
 from tianji.config.xing_chen_biao_module import dou_shu_stars
@@ -30,127 +32,6 @@ from tianji.config.yue_xi_zhu_xing_biao_module import yue_xing_biao
 from tianji.config.liu_nian_zhu_xing_biao_module import Liu_Nian_Xing
 from tianji.config.qi_zi_wei_biao_module import zi_wei_biao
 from tianji.config.chang_sheng_shi_er_xing_module import chang_sheng_shi_er_xing_biao
-
-
-class Gong:
-    """
-    表示紫薇斗数的十二个宫的容器
-    """
-
-    def __init__(self, location):
-        nei_zang = {
-            "子": "胆",
-            "丑": "肝",
-            "寅": "肺",
-            "卯": "大肠",
-            "辰": "胃",
-            "巳": "脾",
-            "午": "先天心脏",
-            "未": "小肠",
-            "申": "膀胱",
-            "酉": "肾",
-            "戌": "后天心脏",
-            "亥": "三焦",
-        }
-        qu_gan = {
-            "子":
-                """膀胱、卵巢、子宫、睾丸""",
-            "丑": """膀胱、卵巢、子宫、睾丸""",
-            "寅": "右足",
-            "卯": "右胁",
-            "辰": "右胸",
-            "巳": "右肩",
-            "午": "脖子、脑袋",
-            "未": "脖子、脑袋",
-            "申": "左肩",
-            "酉": "左胸",
-            "戌": "左胁",
-            "亥": "左足",
-        }
-        self.location = location
-        self.gong_tian_gan = ""
-        self.da_xian = ""
-        self.name = ""
-        self.nei_zang = nei_zang.get(self.location)
-        self.qu_gan = qu_gan.get(self.location)
-
-        # 表示每个等级的星耀，不同等级的星耀会排在不同位置
-        self.stars = {
-            "甲": [],
-            "乙": [],
-            "丙": [],
-            "丁": []
-        }
-
-    def get_san_fang(self, pan):
-        """
-        获取此宫的三方结果
-        :param pan: 排盘对象
-        :return:
-        """
-        di_zhi_iter = Di_Zhi_Iter(-1)
-        di_zhi_iter.update(self.location)
-        for i in range(4):
-            di_zhi_iter.next()
-        shi_ye_gong_location = di_zhi_iter.now()
-        for i in range(2):
-            di_zhi_iter.next()
-        qian_yi_gong_location = di_zhi_iter.now()
-        for i in range(2):
-            di_zhi_iter.next()
-        cai_bo_location = di_zhi_iter.now()
-        return [pan.gongs.get(shi_ye_gong_location),
-                pan.gongs.get(qian_yi_gong_location),
-                pan.gongs.get(cai_bo_location)]
-
-    def append_start(self, star_info):
-        star_name = star_info.name
-        level = star_info.level
-        if level != "四化":  # 不是四化星
-            self.stars.get(level).append(f"{star_name}{liang_du_biao.get(self.location).get(star_name, '')}")
-        else:
-            # 是四化星
-            hua_xing = star_info.belong_star
-            old_star_name = f"{hua_xing}{liang_du_biao.get(self.location).get(hua_xing, '')}"
-            remove_level = self.__remove_star__(old_star_name)
-            new_star_name = f"{hua_xing}{liang_du_biao.get(self.location).get(hua_xing, '')} {star_info.name}"
-            self.stars.get(remove_level).append(new_star_name)
-
-    def set_name(self, name):
-        """
-        设置宫名称
-        :param name:
-        :return:
-        """
-        self.name = "{}宫".format(name)
-
-    def set_da_xian(self, da_xain):
-        self.da_xian = da_xain
-
-    def set_tian_gan(self, gong_tian_gan):
-        """
-        设置宫名称
-        :param gong_tian_gan:
-        :return:
-        """
-        self.gong_tian_gan = gong_tian_gan
-
-    def __remove_star__(self, remove_star):
-        for level, stars in self.stars.items():
-            for star in stars:
-                if star == remove_star:
-                    stars.remove(star)
-                    return level
-
-    def pai_pan(self):
-        """
-        排盘,暂时模拟
-        :return:
-        """
-        print(f"{self.da_xian}")
-        print(f"{self.gong_tian_gan}{self.location}\n")
-        for k, v in self.stars.items():
-            print(k, self.stars.get(k))
 
 
 class Pan:
@@ -167,6 +48,9 @@ class Pan:
         """
         self.pan_time = pan_time
         self.ba_zi = self.pan_time.get_ba_zi()
+        self.liu_nian_ba_zi=pan_time.liu_nian_ba_zi()
+
+        self.age = datetime.now().year - self.pan_time.nian + 1
         self.gender = gender
         self.gongs = {
             "子": Gong("子"),
@@ -201,6 +85,7 @@ class Pan:
         定五行局
         :return:
         """
+
         # 安命宫和身宫
         m = Ming_Shen_Gong(self.pan_time.yue, self.pan_time.sdz)
         self.ming_gong_location = m.ming
@@ -225,7 +110,7 @@ class Pan:
 
     def step2(self):
         # 安紫微星
-        zi_wei_location = zi_wei_biao.get(self.pan_time.ri).get(self.wu_xing_jv_name)
+        zi_wei_location = zi_wei_biao.get(str(self.pan_time.ri)).get(self.wu_xing_jv_name)
         self.gongs.get(zi_wei_location).append_start(dou_shu_stars.get("紫薇"))
         self.append_start(zi_wei_location, "紫薇")
         # 安北斗主星
@@ -273,7 +158,7 @@ class Pan:
         # 安月系诸星
         zuo_fu_loaction = ""
         you_bi_loaction = ""
-        yue_xi_dic = yue_xing_biao.get(self.pan_time.yue)
+        yue_xi_dic = yue_xing_biao.get(str(self.pan_time.yue))
         for star, location in yue_xi_dic.items():
             self.gongs.get(location).append_start(dou_shu_stars.get(star))
             self.append_start(location, star)
@@ -364,8 +249,8 @@ class Pan:
             self.gongs.get(zhi).set_da_xian(da.__getattribute__(zhi))
 
     def step4(self):
-        # TODO 目前搞不清楚这些星是不是每年都会变，但是先按年支固定下来
-        ndz = self.pan_time.ndz  # 流年地支
+        # TODO 目前搞不清楚这些星是不是每年都会变，但是先按流年年算
+        ndz = self.liu_nian_ba_zi[1]  # 流年地支
         yue = self.pan_time.yue
         shi_zhi = self.pan_time.sdz
         # 安流年将前诸星表
@@ -384,5 +269,3 @@ class Pan:
         doujun = Dou_jun(yue, shi_zhi)
         location = doujun.get_liu_nian_location(ndz)
         self.liu_nian_dou_jun = location
-
-

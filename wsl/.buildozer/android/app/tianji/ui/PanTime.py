@@ -3,13 +3,12 @@
 # ----------------------------------------------------------------------------------------------------------------------
 # @Time    : 2023/11/20 0:59
 # @Author  : huangfujue
-# @File    : PanTime.py
+# @File    : pan_time_module.py
 # @Date    : 2023/11/20 
 """
 模块说明
 """
-
-
+import datetime
 
 # ----------------------------------------------------------------------------------------------------------------------
 from lunar_python import Lunar, Solar
@@ -36,6 +35,7 @@ class PanTime:
         self.day_info =Lunar(nian,yue,ri,shi,0,0)
 
 
+
     def get_ba_zi(self):
         bazi = self.day_info.getBaZi()
         self.ntg=bazi[0][0]
@@ -60,8 +60,15 @@ class PanTime:
 
         y=self.day_info.getSolar().getYear()
         m=self.day_info.getSolar().getMonth()
-        d=self.day_info.getSolar().getYear()
+        d=self.day_info.getSolar().getDay()
         return y, m, d
+
+
+    def liu_nian_ba_zi(self):
+        t=datetime.datetime.now()
+        y,m,d= PanTime.solar_to_lunar(t.year,t.month,t.day)
+        t=PanTime(y,m,d,3)
+        return t.get_ba_zi()
 
     @staticmethod
     def solar_to_lunar(nian, yue, ri):
@@ -72,7 +79,7 @@ class PanTime:
                :param ri:
                :return:
                """
-        s = Solar(1998, 1, 31, 6, 0, 0)
+        s = Solar.fromYmd(nian, yue, ri)
         l = Lunar.fromSolar(s)
 
         y = l.getYear()

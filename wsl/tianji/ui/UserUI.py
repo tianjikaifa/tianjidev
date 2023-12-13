@@ -22,16 +22,15 @@ from kivy.uix.button import Button, Label
 from kivy.uix.checkbox import CheckBox
 
 from tianji.config.gua_config import gua_dict
-from tianji.ui.PanTime import PanTime
-from tianji.ui.Dialog import OpenFileDialog, message_popup, SaveFileDialog
-from tianji.ui.MingPan import Pan
-from tianji.ui.font_set import set_font, font_size
+from tianji.config.pan_time_module import PanTime
+from tianji.ui.DialogScreenUI import OpenFileDialog, message_popup, SaveFileDialog
+from tianji.ui.MingPanScreenUI import Pan
+from tianji.ui.FontSetModule import set_font, font_size
 from tianji.ui.logModule import Logger
 
 from kivy.config import Config
 
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
-
 dir_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "log")
 if not os.path.exists(dir_path):
     os.makedirs(dir_path)
@@ -47,14 +46,15 @@ class RadioButton(CheckBox):
 
 class MingPanDate(BoxLayout):
     def __init__(self, pan_windows, **kwargs):
-        kwargs["size_hint"] = (1.33, 1)
+        kwargs["size_hint"] = (1.30, 1)
         super(MingPanDate, self).__init__(**kwargs)
         self.user_info = {}
         self.gender_radio = {}
         self.gender = "男"
 
         self.button_height = 40
-        self.label_widht = 50
+        self.button_widht = 80
+        self.label_widht = 70
         self.user_info_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "user_info")
         self.pai_pan = None  # 排盘委托方法
         self.pan_windows = pan_windows  # AppScreen 对象
@@ -67,51 +67,65 @@ class MingPanDate(BoxLayout):
         root.add_widget(self.make_input_item("姓名"))
         root.add_widget(self.make_input_item("日历"))
         root.add_widget(self.make_input_item("农历"))
-        root.add_widget(self.make_input_item("八字"))
-        root.add_widget(self.make_input_item("五行局"))
+        root.add_widget(self.make_input_item("四柱"))
+        root.add_widget(self.make_input_item("排盘八字"))
 
-        root.add_widget(self.make_gua("先天", ""))
-        root.add_widget(self.make_gua("后天", ""))
+
+        root.add_widget(self.make_label_show("先天", ""))
+        root.add_widget(self.make_label_show("后天", ""))
+        root.add_widget(self.make_label_show("五行局", ""))
+        root.add_widget(self.make_label_show("阴阳男女", ""))
+        root.add_widget(self.make_label_show("虚岁", ""))
 
         gender_item = BoxLayout(orientation="horizontal")
         gender_item.add_widget(self.mkke_gender_item("男"))
         gender_item.add_widget(self.mkke_gender_item("女"))
         gl = Label(text="性别", size_hint=(None, None), size=(self.label_widht, self.button_height))
         set_font(gl)
+        gl.text_align = "left"
         gender_select.add_widget(gl)
         gender_select.add_widget(gender_item)
 
-        user_operation = GridLayout(spacing=10, padding=10)
+        user_operation = GridLayout(spacing=10)
         user_operation.cols = 2
 
         # user_operation.spacing = 20
-        pai_pan_button = Button(size_hint=(None, None), size=(80, self.button_height), text='排盘',
+        pai_pan_button = Button(size_hint=(None, None), size=(self.button_widht, self.button_height), text='排盘',
                                 on_release=self.start)
-        bao_cun_button = Button(size_hint=(None, None), size=(80, self.button_height), text='保存',
+        bao_cun_button = Button(size_hint=(None, None), size=(self.button_widht, self.button_height), text='保存',
                                 on_release=self.save_user_info)
-        da__kai_button = Button(size_hint=(None, None), size=(80, self.button_height), text='历史',
+        da__kai_button = Button(size_hint=(None, None), size=(self.button_widht, self.button_height), text='历史',
                                 on_release=self.open_from_file)
-        zhuancunbutton = Button(size_hint=(None, None), size=(80, self.button_height), text='图片',
+        zhuancunbutton = Button(size_hint=(None, None), size=(self.button_widht, self.button_height), text='存图',
                                 on_release=self.save_to_file)
-        qing_li_button = Button(size_hint=(None, None), size=(80, self.button_height), text='清理',
-                                on_release=self.clear_user_infoo)
+        qing_li_button = Button(size_hint=(None, None), size=(self.button_widht, self.button_height), text='清理',
+                                on_release=self.clear_user_info)
+        tui_chu_button = Button(size_hint=(None, None), size=(self.button_widht, self.button_height), text='退出',
+                                on_release=self.pan_windows.exit_fun)
+        she_zhi_button = Button(size_hint=(None, None), size=(self.button_widht, self.button_height), text='设置',
+                                on_release=self.pan_windows.settings)
 
-        set_font(pai_pan_button, bao_cun_button, da__kai_button, zhuancunbutton, qing_li_button)
+        set_font(pai_pan_button, bao_cun_button, da__kai_button, zhuancunbutton, qing_li_button, tui_chu_button,
+                 she_zhi_button)
 
-        user_operation.add_widget(zhuancunbutton)
-        user_operation.add_widget(da__kai_button)
+
         user_operation.add_widget(bao_cun_button)
-        user_operation.add_widget(pai_pan_button)
+        user_operation.add_widget(da__kai_button)
+        user_operation.add_widget(zhuancunbutton)
         user_operation.add_widget(qing_li_button)
+        user_operation.add_widget(she_zhi_button)
+        user_operation.add_widget(pai_pan_button)
+        user_operation.add_widget(tui_chu_button)
+
         root.add_widget(user_operation)
 
         # user_operation = BoxLayout(orientation="horizontal",spacing=10)
         # operation1 = BoxLayout(orientation="vertical",spacing=10)
         # operation2 = BoxLayout(orientation="vertical",spacing=10)
-        # pai_pan_button = Button(size_hint=(1,None),size=(80,50),text='排盘', on_release=self.start)
-        # bao_cun_button = Button(size_hint=(1,None),size=(80,50),text='保存', on_release=self.save_user_info)
-        # da__kai_button = Button(size_hint=(1,None),size=(80,50),text='历史', on_release=self.open_from_file)
-        # zhuancunbutton = Button(size_hint=(1,None),size=(80,50),text='图片', on_release=self.save_to_file)
+        # pai_pan_button = Button(size_hint=(1,None),size=(self.button_widht,50),text='排盘', on_release=self.start)
+        # bao_cun_button = Button(size_hint=(1,None),size=(self.button_widht,50),text='保存', on_release=self.save_user_info)
+        # da__kai_button = Button(size_hint=(1,None),size=(self.button_widht,50),text='历史', on_release=self.open_from_file)
+        # zhuancunbutton = Button(size_hint=(1,None),size=(self.button_widht,50),text='图片', on_release=self.save_to_file)
         #
         # set_font(pai_pan_button, bao_cun_button, da__kai_button, zhuancunbutton)
         # operation1.add_widget(zhuancunbutton)
@@ -158,6 +172,7 @@ class MingPanDate(BoxLayout):
     def make_input_item(self, item_type="日历"):
         root = BoxLayout(orientation="horizontal", spacing=20, size_hint=(1, None), size=(200, self.button_height))
         label = Label(text=f"{item_type}: ", size_hint=(None, None), size=(self.label_widht, self.button_height))
+        label.text_align = "left"
         input = TextInput(multiline=False)
         root.add_widget(label)
         root.add_widget(input)
@@ -176,18 +191,21 @@ class MingPanDate(BoxLayout):
 
         return root
 
-    def make_gua(self, gua_type, gua_name=""):
+    def make_label_show(self, gua_type, gua_name=""):
 
         root = BoxLayout(orientation="horizontal", spacing=20, size_hint=(1, None), size=(200, self.button_height))
-        label = Label(text=f"{gua_type}: ", size_hint=(None, None), size=(self.label_widht, self.button_height))
-        button = Button(text=f"{gua_name} ", size_hint=(None, None), size=(80, self.button_height))
-
-        button.on_press = lambda: message_popup(
-            f'\n{button.text.strip()} \n\n{gua_dict.get(button.text.strip(), {f"{button.text.strip()}": "未定义的卦,也许是有问题需要解决"}).get(gua_type)}')
+        label = Label(text=f"{gua_type}: ", size_hint=(None, None), size=(self.label_widht + 20, self.button_height))
+        button = Button(text=f"{gua_name} ", size_hint=(None, None), size=(self.button_widht, self.button_height))
+        set_font(button, label)
+        button.background_color = (0.98, 0.98, 0.98, 1)
+        label.text_align = "left"
+        if  gua_type in  ["先天","后天"]:
+            button.on_release = lambda: message_popup(
+                f'\n{button.text.strip()} \n\n{gua_dict.get(button.text.strip(), {f"{button.text.strip()}": "未定义的卦,也许是有问题需要解决"}).get(gua_type)}')
 
         root.add_widget(label)
         root.add_widget(button)
-        set_font(button, label)
+
         self.user_info[gua_type] = button
         return root
 
@@ -348,7 +366,7 @@ class MingPanDate(BoxLayout):
             #                          f"{self.user_info.get('姓名').text}_{datetime.datetime.now().strftime('%Y-%m-%d')}.png")
             # self.pan_windows.export_to_png(file_name, size=self.pan_windows.size, dpi=300, quality=100)
 
-    def clear_user_infoo(self, button, *args, **kwargs):
+    def clear_user_info(self, button, *args, **kwargs):
         self.user_info.get("姓名").text = ""
         self.user_info.get("日历").text = ""
         self.user_info.get("农历").text = ""

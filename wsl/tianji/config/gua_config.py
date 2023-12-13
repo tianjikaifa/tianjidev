@@ -25,7 +25,7 @@ class LiuNianGua:
 
     def __init__(self, ming_pan=None, *args, **kwargs):
         self.ming_pan = ming_pan
-
+        self.age = 1
         if self.ming_pan is None:
             self.guas = self.default_gua()
         else:
@@ -46,5 +46,4 @@ class LiuNianGua:
         for name in gua_dict:
             count += 1
             guas[count] = name
-        self.age = 1
         return guas

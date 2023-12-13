@@ -1,35 +1,32 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# ----------------------------------------------------------------------------------------------------------------------
-# @Time    : 2023/12/12 0:06
-# @Author  : huangfujue
-# @File    : aa.py
-# @Date    : 2023/12/12 
-"""
-模块说明
-"""
-# ----------------------------------------------------------------------------------------------------------------------
-from kivy.app import App
-from kivy.uix.button import Button
-from kivy.uix.popup import Popup
-from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
-from kivy.graphics import Color, Rectangle
+from kivy.uix.dropdown import DropDown
+from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
 
+from kivy.app import App
+class MyDropDown(BoxLayout):
+    def __init__(self,**kwargs):
+        super(MyDropDown).__init__(**kwargs)
+        l=BoxLayout("")
+        input = TextInput(multiline=False)
+        but = TextInput(multiline=False)
+        dp = DropDown()
+        dp.bind(on_select=lambda instance, x: setattr(input, 'text', x))
+        for i in range(100):
+            item = Button(text='hello %d' % i, size_hint_y=None, height=44)
+            item.bind(on_release=lambda btn: dp.select(btn.text))
+            dp.add_widget(item)
+        dp.open()
 
-class TestApp(App):
+class PhoneApp(App):
+
     def build(self):
-        content = Button(text='Close me!')
-        popup = Popup(title='Test popup', content=content, size_hint=(None, None), size=(400, 400))
+        app = MyDropDown()
 
-        # 自定义背景颜色
-        with popup.canvas.before:
-            Color(1, 0, 0, 1)  # 设置背景颜色为红色
-            self.rect = Rectangle(size=popup.size, pos=popup.pos)
-
-        content.bind(on_press=popup.dismiss)
-        return Button(text='Open popup', on_press=popup.open)
+        return app
 
 
-if __name__ == '__main__':
-    TestApp().run()
+
+app = MyDropDown()
+app.title = "天纪 v1.0  --测试版本"
+app.run()
