@@ -1,4 +1,3 @@
-/tianji/data/user_info/
-/wsl/.buildozer/
-/wsl/.idea/
-/wsl/bin/
+/.buildozer/
+/bin/
+/tianji/data/png/

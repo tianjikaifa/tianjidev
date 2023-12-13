@@ -3,6 +3,9 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/tianji/data/user_info" />
+      <excludeFolder url="file://$MODULE_DIR$/.buildozer" />
+      <excludeFolder url="file://$MODULE_DIR$/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/tianji/data/png" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.10 (appENV)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
