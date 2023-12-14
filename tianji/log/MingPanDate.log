@@ -1,0 +1,28 @@
+2023-12-13 11:24:20,513 - D:\pycharm\pythonProject1\wsl\tianji\ui\UserUI.py[line:215] - ERROR: Traceback (most recent call last):
+  File "D:\pycharm\pythonProject1\wsl\tianji\ui\UserUI.py", line 201, in get_ri_li_pan_time
+    y = int(ss[0])
+ValueError: invalid literal for int() with base 10: ''
+
+2023-12-13 13:01:20,639 - D:\pycharm\pythonProject1\wsl\tianji\ui\UserUI.py[line:226] - ERROR: Traceback (most recent call last):
+  File "D:\pycharm\pythonProject1\wsl\tianji\ui\UserUI.py", line 212, in get_ri_li_pan_time
+    y = int(ss[0])
+ValueError: invalid literal for int() with base 10: ''
+
+2023-12-13 13:01:23,236 - D:\pycharm\pythonProject1\wsl\tianji\ui\UserUI.py[line:226] - ERROR: Traceback (most recent call last):
+  File "D:\pycharm\pythonProject1\wsl\tianji\ui\UserUI.py", line 212, in get_ri_li_pan_time
+    y = int(ss[0])
+ValueError: invalid literal for int() with base 10: ''
+
+2023-12-13 14:36:17,637 - D:\pycharm\pythonProject1\wsl\tianji\ui\UserUI.py[line:271] - ERROR: Traceback (most recent call last):
+  File "D:\pycharm\pythonProject1\wsl\tianji\ui\UserUI.py", line 263, in get_nong_li_pan_time
+    pt = PanTime(y, m, d, shi)
+  File "D:\pycharm\pythonProject1\wsl\tianji\ui\PanTime.py", line 35, in __init__
+    self.day_info =Lunar(nian,yue,ri,shi,0,0)
+  File "D:\pythonENV\Anaconda3\envs\appENV\lib\site-packages\lunar_python\Lunar.py", line 34, in __init__
+    self.__solar = Solar.fromYmdHms(noon.getYear(), noon.getMonth(), noon.getDay(), hour, minute, second)
+  File "D:\pythonENV\Anaconda3\envs\appENV\lib\site-packages\lunar_python\Solar.py", line 83, in fromYmdHms
+    return Solar(year, month, day, hour, minute, second)
+  File "D:\pythonENV\Anaconda3\envs\appENV\lib\site-packages\lunar_python\Solar.py", line 25, in __init__
+    raise Exception("wrong hour %d" % hour)
+Exception: wrong hour 24
+
