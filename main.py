@@ -69,7 +69,7 @@ class PhoneApp(App):
     def build(self):
         #app = AppScreen(self.stop)
         app = AppScreen(self)
-        pass
+
         return app
 
     def on_start(self):
