@@ -16,7 +16,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Color, Line
 from kivy.uix.button import Button, Label
 
-from tianji.config.xing_chen_biao_module import dou_shu_stars
+from tianji.config.zi_wei_dou_shu.xing_chen_biao_module import dou_shu_stars
 from tianji.ui.DialogScreenUI import message_popup
 from tianji.ui.FontSetModule import set_font
 
@@ -85,15 +85,18 @@ class GongScreen(BoxLayout):
 
 class StarListScreen(BoxLayout):
     def __init__(self, star_list, **kwargs):
-        #kwargs["spacing"] = 10
+        # kwargs["spacing"] = 10
 
         self.align = ('left', 'top')
         super(StarListScreen, self).__init__(**kwargs)
         for star in star_list:
-            res=self.find_star(star)
-            if  res[0]:
+            res = self.find_star(star)
+            if res[0]:
                 button = Button(text=star)
-                button.on_release =lambda : message_popup(res[1].info)
+                button.info = res[1].info
+                # button.on_release =self.add_star_info(button)
+                button.on_press = self.add_star_info(button)
+
             else:
                 button = Label(text=star)
             set_font(button)
@@ -103,13 +106,19 @@ class StarListScreen(BoxLayout):
 
     def find_star(self, star=""):
         flag = False
-        star_info=None
+        star_info = None
         for star_name in dou_shu_stars:
             if star.find(star_name) > -1:
                 flag = True
-                star_info=dou_shu_stars.get(star_name)
+                star_info = dou_shu_stars.get(star_name)
                 break
 
-        return [flag,star_info]
+        return [flag, star_info]
 
+    def add_star_info(self, button):
 
+        def ff(*args, **kwargs):
+
+            message_popup(button.info)
+
+        return ff

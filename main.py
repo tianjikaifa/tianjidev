@@ -10,17 +10,19 @@
 """
 
 import traceback
-
 import kivy
 from kivy.lang import Builder
 from kivy.app import App
 
-from tianji.ui.AppScreenUI import AppScreen
+from tianji.ui.AppScreenUI import AppScreen, AppScreen2
 from tianji.ui.DialogScreenUI import YesNoPopup
 from tianji.ui.logModule import Logger
+from tianji.ui.screen_manager_module import main_screen, screen_manager
 
 
-__version__ = "1.0.1"
+
+__version__ = "1.0.2"
+
 
 Builder.load_string('''
 <MyScreen>
@@ -34,8 +36,6 @@ Builder.load_string('''
             # self here refers to the widget i.e FloatLayout
             pos: self.pos
             size: self.size
-
-
 
 <Button>:
     background_color: 
@@ -51,8 +51,6 @@ Builder.load_string('''
             radius: [20]
     color: 
         0, 0, 0, 1
-    padding: 10
-
 
 ''')
 
@@ -68,14 +66,21 @@ class PhoneApp(App):
 
     def build(self):
         #app = AppScreen(self.stop)
-        app = AppScreen(self)
+        # app = AppScreen(self)
+        #
+        # return app
 
-        return app
+        self.screen_manager=screen_manager
+        #main_screen.add_widget(AppScreen(self))
+        main_screen.add_widget(AppScreen2(self))
+
+        return self.screen_manager
+
 
     def on_start(self):
-
+        #kivy.platform="android"
         if kivy.platform == "win":
-            self.root_window.size = (700, 1300)
+            self.root_window.size = (900, 900)
 
 
 
@@ -88,7 +93,7 @@ class PhoneApp(App):
 
 try:
     app = PhoneApp()
-    app.title = "天纪 v1.0  --测试版本"
+    app.title = "天纪 v1.0 倪师野生弟子开发版本"
     app.run()
 except Exception as E:
     E = traceback.format_exc()

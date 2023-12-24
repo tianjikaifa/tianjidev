@@ -10,11 +10,13 @@
 """
 
 # ----------------------------------------------------------------------------------------------------------------------
+import gc
 from kivy.uix.boxlayout import BoxLayout
 
 from kivy.config import Config
+from kivy.uix.label import Label
 
-from tianji.config.gua_config import gua_dict, LiuNianGua
+from tianji.config.zi_wei_dou_shu.gua_config import LiuNianGua
 from tianji.ui.BaseUI import MyScreen
 from tianji.ui.UserUI import MingPanDate
 from tianji.ui.MingPanScreenUI import Gong
@@ -24,17 +26,20 @@ from tianji.ui.GuaScreenUI import GuaUI
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
 
+# 紫薇斗数部分
 class AppScreen(MyScreen):
 
-    def __init__(self,app, **kwargs):
+    def __init__(self, app, **kwargs):
         super().__init__(**kwargs)
-        self.exit_fun=app.stop
-        self.settings=app.open_settings
-        self.user = MingPanDate(self)
+        self.exit_fun = app.stop
+        self.settings = app.open_settings
+        self.__size_hint = (1.30, 1)
+        self.user = MingPanDate(self, size_hint=self.__size_hint)
         self.user.pai_pan = self.pai_pan
 
         self.gongs = self.default_gongs()
         self.init_time = True
+
         self.pai_pan()
 
     def pai_pan(self, ming_pan=None):
@@ -84,18 +89,20 @@ class AppScreen(MyScreen):
         zhong_you.add_widget(self.gongs.get("酉"))
         zhong_you.add_widget(self.gongs.get("戌"))
         mid_shui_ping.add_widget(zhong_zuo)
+
         if self.init_time:
             mid_shui_ping.add_widget(self.user)
             self.init_time = False
         else:
             old = self.user
-            self.user = MingPanDate(self)
+            self.user = MingPanDate(self, size_hint=self.__size_hint)
             self.user.update_ming_pan_time(old)
             old.clear_widgets()
             old = None
             mid_shui_ping.add_widget(self.user)
 
-        mid_shui_ping.add_widget(GuaUI(self.guas, size_hint=(0.7, 1)))
+        mid_shui_ping.add_widget(GuaUI(self.guas, size_hint=(2 - 0.05 - self.__size_hint[0], 1)))
+        mid_shui_ping.add_widget(Label(size_hint=(0.05, 1)))
         mid_shui_ping.add_widget(zhong_you)
         root.add_widget(mid_shui_ping)
 
@@ -114,16 +121,15 @@ class AppScreen(MyScreen):
             self.user.user_info.get("先天").text = "未排盘"
             self.user.user_info.get("后天").text = "未排盘"
         else:
-            pai_pan_bazi=[]
+            pai_pan_bazi = []
             for item in ming_pan.ba_zi:
                 pai_pan_bazi.append(item)
-            pai_pan_bazi[0]=ming_pan.pan_time.current_year_ntg
-            pai_pan_bazi[1]=ming_pan.pan_time.current_year_ndz
+            pai_pan_bazi[0] = ming_pan.pan_time.current_year_ntg
+            pai_pan_bazi[1] = ming_pan.pan_time.current_year_ndz
             self.user.user_info.get("排盘八字").text = "".join(pai_pan_bazi)
             self.user.user_info.get("四柱").text = "".join(ming_pan.ba_zi)
             self.user.user_info.get("五行局").text = ming_pan.wu_xing_jv_name
             self.user.user_info.get("阴阳男女").text = f"{ming_pan.yin_yang}{ming_pan.gender}"
-            self.user.user_info.get("虚岁").text = f"{self.age} 岁"
 
             # TODO 需要在这写下更新先天卦和后天卦
             self.user.user_info.get("先天").text = "坤为地"
@@ -152,5 +158,55 @@ class AppScreen(MyScreen):
                 continue
             self.remove_widget(child)
 
+        child = None
+        gc.collect()
+
         self.user.user_info.get("先天").text = "未排盘"
         self.user.user_info.get("后天").text = "未排盘"
+
+
+# 易经推命部分
+class AppScreen2(MyScreen):
+
+    def __init__(self, app, **kwargs):
+        super().__init__(**kwargs)
+        self.exit_fun = app.stop
+        self.settings = app.open_settings
+        self.__size_hint = (1.30, 1)
+        self.user = MingPanDate(self, size_hint=self.__size_hint)
+        self.user.pai_pan = self.pai_pan
+        self.add_widget(self.user)
+
+        self.pai_pan()
+
+    def pai_pan(self, ming_pan=None):
+
+        self.update_gua(ming_pan)
+        liu_nian_gua = LiuNianGua(ming_pan)
+        self.guas = liu_nian_gua.guas
+        self.age = liu_nian_gua.age
+
+        root = BoxLayout(orientation="vertical")
+        root.padding = 20
+        root.spacing = 0
+
+    def update_gua(self, ming_pan=None):
+        if ming_pan is None:
+            self.user.user_info.get("先天").text = "未排盘"
+            self.user.user_info.get("后天").text = "未排盘"
+        else:
+            pai_pan_bazi = []
+            for item in ming_pan.ba_zi:
+                pai_pan_bazi.append(item)
+            pai_pan_bazi[0] = ming_pan.pan_time.current_year_ntg
+            pai_pan_bazi[1] = ming_pan.pan_time.current_year_ndz
+            self.user.user_info.get("排盘八字").text = "".join(pai_pan_bazi)
+            self.user.user_info.get("四柱").text = "".join(ming_pan.ba_zi)
+            self.user.user_info.get("五行局").text = ming_pan.wu_xing_jv_name
+            self.user.user_info.get("阴阳男女").text = f"{ming_pan.yin_yang}{ming_pan.gender}"
+            self.user.gender_radio.get(ming_pan.gender).active = True
+
+
+            # TODO 需要在这写下更新先天卦和后天卦
+            self.user.user_info.get("先天").text = "坤为地"
+            self.user.user_info.get("后天").text = "地山谦"

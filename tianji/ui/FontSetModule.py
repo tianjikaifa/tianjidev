@@ -22,18 +22,20 @@ font_size = 22
 
 if kivy.platform == "win":
     font_size = 17
+
+font_path=os.path.join(os.path.dirname(os.path.dirname(__file__)),"data", "font","NotoSansSC-VariableFont_wght.ttf").replace("\\","/")
+
 def set_font(*objs):
     for obj in objs:
         obj.font_size = font_size
         obj.bold = True
-        obj.font_name = os.path.join(os.path.dirname(__file__), "../config", "font",
-                                     "NotoSansSC-VariableFont_wght.ttf")
-
+        obj.font_name = font_path
         if isinstance(obj, Label):
             obj.color = (0, 0, 0, 1)
 
         if isinstance(obj, Button):
             obj.padding=10
+
 
         if isinstance(obj, TextInput):
             obj.color = (0, 0, 0, 1)

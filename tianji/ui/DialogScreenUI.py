@@ -17,15 +17,19 @@ from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button, Label
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 
 from tianji.ui.FontSetModule import set_font, font_size
+from tianji.ui.screen_manager_module import  screen_manager
 
 
 class WhitePopup(Popup):
-    pass
 
+    def __init__(self, **kwargs):
+        super(WhitePopup, self).__init__(**kwargs)
+        self.auto_dismiss=False
 
 
 class OpenFileDialog(WhitePopup):
@@ -44,9 +48,9 @@ class OpenFileDialog(WhitePopup):
         btn_height = 45
         btn_layout = BoxLayout(size_hint=(1, None), size=(180, btn_height), spacing=15)
 
-        select_button = Button(text='打开', on_release=self.select_file, size_hint=(None, None), size=(180, btn_height))
-        chanel_button = Button(text='取消', on_release=self.chanel, size_hint=(None, None), size=(180, btn_height))
-        delete_button = Button(text='删除', on_release=self.delete_file, size_hint=(None, None), size=(180, btn_height))
+        select_button = Button(text='打开', on_press=self.select_file, size_hint=(None, None), size=(180, btn_height))
+        chanel_button = Button(text='取消', on_press=self.chanel, size_hint=(None, None), size=(180, btn_height))
+        delete_button = Button(text='删除', on_press=self.delete_file, size_hint=(None, None), size=(180, btn_height))
         self.filechooser = FileChooserIconView(path=self.default_dir, dirselect=False, size_hint=(0.9, 0.9))
 
         set_font(select_button, chanel_button, delete_button, self, self.filechooser)
@@ -103,7 +107,7 @@ class OpenFileDialog(WhitePopup):
 
 
 class SaveFileDialog(OpenFileDialog):
-    def __init__(self, title, fun=None, default_dir=None, file_name=None,**kwargs):
+    def __init__(self, title, fun=None, default_dir=None, file_name=None, **kwargs):
         self.file_name = "" if file_name is None else file_name
         super(SaveFileDialog, self).__init__(title, fun, default_dir, **kwargs)
 
@@ -114,9 +118,9 @@ class SaveFileDialog(OpenFileDialog):
         btn_height = 45
         btn_layout = BoxLayout(size_hint=(1, None), size=(180, btn_height), spacing=15)
 
-        submit_button = Button(text='保存', on_release=self.submit, size_hint=(None, None), size=(180, btn_height))
-        chanel_button = Button(text='取消', on_release=self.dismiss, size_hint=(None, None), size=(180, btn_height))
-        delete_button = Button(text='删除', on_release=self.delete_file, size_hint=(None, None), size=(180, btn_height))
+        submit_button = Button(text='保存', on_press=self.submit, size_hint=(None, None), size=(180, btn_height))
+        chanel_button = Button(text='取消', on_press=self.dismiss, size_hint=(None, None), size=(180, btn_height))
+        delete_button = Button(text='删除', on_press=self.delete_file, size_hint=(None, None), size=(180, btn_height))
 
         self.filechooser = FileChooserIconView(path=self.default_dir, dirselect=False, size_hint=(0.9, 0.9))
         self.saveinput = TextInput(text=self.file_name, multiline=False, size_hint_y=None, height=btn_height)
@@ -127,7 +131,6 @@ class SaveFileDialog(OpenFileDialog):
         btn_layout.add_widget(Label(size_hint=(1, None), size=(180, btn_height)))
         btn_layout.add_widget(delete_button)
         btn_layout.add_widget(submit_button)
-
 
         layout.add_widget(self.saveinput)
         layout.add_widget(btn_layout)
@@ -189,8 +192,8 @@ class YesNoPopup(WhitePopup):
         self.content = content
 
         set_font(yes_button, no_button, content, self)
-        no_button.on_release = self.no
-        yes_button.on_release = self.yes
+        no_button.on_press = self.no
+        yes_button.on_press = self.yes
 
     def no(self):
         super().dismiss()
@@ -210,10 +213,10 @@ def message_popup(msg=None):
     contex = BoxLayout(orientation="vertical")
     popup = WhitePopup(title="",
                        content=None,
-                       size_hint=(0.98, None), size=(400, 800))
+                       size_hint=(0.98, None), size=(400, 1000))
 
     button = Button(text='确定', size_hint=(1, None), size=(400, 40))
-    label_container = BoxLayout(orientation="vertical", spacing=30, size_hint_y=None)
+    label_container = BoxLayout(orientation="vertical", spacing=120, size_hint_y=None)
     label_container.bind(minimum_height=label_container.setter('height'))
 
     scroll_view = ScrollView()
@@ -230,8 +233,6 @@ def message_popup(msg=None):
         label.color = (1, 1, 1, 1)
         label.font_size = font_size
         label_container.add_widget(label)
-        label_container.add_widget(Label())
-        label_container.add_widget(Label())
 
     scroll_view.add_widget(label_container)
     # contex.add_widget(label)
@@ -241,14 +242,36 @@ def message_popup(msg=None):
     popup.content = contex
     set_font(button, contex, popup)
 
-    button.on_release = lambda: popup.dismiss()
+    button.on_press = lambda: popup.dismiss()
     popup.open()
+    return popup
+
+
+
+
+
+# class message_popup(Screen):
+#     count=0
+#     def __init__(self, msg=None, **kwargs):
+#         self.name=f"Message_{message_popup.count}"
+#         super(message_popup).__init__(**kwargs)
+#
+#         self.call_screen_name = screen_manager.current
+#         aa=Message2(msg)
+#         self.add_widget(aa)
+#         aa.open()
+#         screen_manager.add_widget(self)
+#         screen_manager.current = self.name
+#
+#     def close(self):
+#         screen_manager.remove_widget(self)
+#         screen_manager.current = self.call_screen
 
 
 class MyApp(App):
     def build(self):
         button = Button(text='open file')
-        button.bind(on_release=self.show_filechooser)
+        button.bind(on_press=self.show_filechooser)
         return button
 
     def show_filechooser(self, instance):

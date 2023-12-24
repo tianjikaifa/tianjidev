@@ -15,7 +15,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 
-from tianji.config.gua_config import gua_dict
+from tianji.config.zi_wei_dou_shu.gua_config import gua_dict
 from tianji.ui.DialogScreenUI import message_popup
 from tianji.ui.FontSetModule import set_font
 
@@ -41,7 +41,7 @@ class GuaUI(BoxLayout):
             btn = Button(text=f"{age}岁: {gua}", size_hint_y=None, height=40)
             btn.gua_name = gua
             btn.age = age
-            btn.on_release = self.liu_nian(btn)
+            btn.on_press = self.liu_nian(btn)
             set_font(btn)
             btn.background_color = (0.98, 0.98, 0.98, 1)
             gua_items.add_widget(btn)

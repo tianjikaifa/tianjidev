@@ -1,3 +1,7 @@
 /.buildozer/
 /bin/
 /tianji/data/png/
+/build/
+/dist/
+/exe安装包/
+/main.spec

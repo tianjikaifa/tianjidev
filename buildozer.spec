@@ -1,7 +1,7 @@
 [app]
 
 # (str) Title of your application
-title = 紫薇斗数
+title = 天纪排盘
 
 # (str) Package name
 package.name = tianji
@@ -22,14 +22,14 @@ source.include_exts = py,png,jpg,kv,atlas,ttf,json
 #source.exclude_exts = spec
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-#source.exclude_dirs = tests, bin, venv
+source.exclude_dirs = tests, bin, venv,build,dist
 
 # (list) List of exclusions using pattern matching
 # Do not prefix with './'
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 1.0.1
+version = 1.0.2
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -195,11 +195,11 @@ permissions:
 # (list) Put these files or directories in the apk res directory.
 # The option may be used in three ways, the value may contain one or zero ':'
 # Some examples:
-# 1) A file to add to resources, legal resource names contain ['a-z','0-9','_']
+# 1) ABCD file to add to resources, legal resource names contain ['a-z','0-9','_']
 # android.add_resources = my_icons/all-inclusive.png:drawable/all_inclusive.png
-# 2) A directory, here  'legal_icons' must contain resources of one kind
+# 2) ABCD directory, here  'legal_icons' must contain resources of one kind
 # android.add_resources = legal_icons:drawable
-# 3) A directory, here 'legal_resources' must contain one or more directories, 
+# 3) ABCD directory, here 'legal_resources' must contain one or more directories,
 # each of a resource kind:  drawable, xml, etc...
 # android.add_resources = legal_resources
 #android.add_resources =
