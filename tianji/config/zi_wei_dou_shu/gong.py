@@ -68,26 +68,23 @@ class Gong:
             "丁": []
         }
 
-    def get_san_fang(self, pan):
+    def get_san_fang(self):
         """
         获取此宫的三方结果
-        :param pan: 排盘对象
         :return:
         """
         di_zhi_iter = Di_Zhi_Iter(-1)
         di_zhi_iter.update(self.location)
         for i in range(4):
             di_zhi_iter.up()
-        shi_ye_gong_location = di_zhi_iter.now()
+        guan_lu_location = di_zhi_iter.now()
         for i in range(2):
             di_zhi_iter.up()
         qian_yi_gong_location = di_zhi_iter.now()
         for i in range(2):
             di_zhi_iter.up()
         cai_bo_location = di_zhi_iter.now()
-        return [pan.gongs.get(shi_ye_gong_location),
-                pan.gongs.get(qian_yi_gong_location),
-                pan.gongs.get(cai_bo_location)]
+        return [cai_bo_location,qian_yi_gong_location,guan_lu_location]
 
     def append_start(self, star_info):
         star_name = star_info.name

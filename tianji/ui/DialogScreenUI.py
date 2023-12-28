@@ -15,6 +15,7 @@ from kivy.app import App
 from kivy.graphics import Color, Rectangle
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.image import Image
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button, Label
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -208,7 +209,7 @@ class YesNoPopup(WhitePopup):
         self.res = True
 
 
-def message_popup(msg=None):
+def message_popup(msg=None,picture=None):
     title = '你的输入有误，请检查 ' if msg is None else msg
     contex = BoxLayout(orientation="vertical")
     popup = WhitePopup(title="",
@@ -218,6 +219,7 @@ def message_popup(msg=None):
     button = Button(text='确定', size_hint=(1, None), size=(400, 40))
     label_container = BoxLayout(orientation="vertical", spacing=120, size_hint_y=None)
     label_container.bind(minimum_height=label_container.setter('height'))
+
 
     scroll_view = ScrollView()
     title = "\n" + title
@@ -233,6 +235,10 @@ def message_popup(msg=None):
         label.color = (1, 1, 1, 1)
         label.font_size = font_size
         label_container.add_widget(label)
+
+    if not picture is None:
+        im=Image(source=picture,size_hint=(0.98, None), size=(400, 1000))
+        label_container.add_widget(im)
 
     scroll_view.add_widget(label_container)
     # contex.add_widget(label)

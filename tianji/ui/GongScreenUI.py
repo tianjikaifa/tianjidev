@@ -22,12 +22,14 @@ from tianji.ui.FontSetModule import set_font
 
 
 class GongScreen(BoxLayout):
-    def __init__(self, gong_obj=None, **kwargs):
+    def __init__(self, gong_obj=None,screen_obj=None, **kwargs):
         kwargs["orientation"] = "vertical"
         kwargs["padding"] = 10
 
+
         super(GongScreen, self).__init__(**kwargs)
 
+        self.screen_obj=screen_obj
         self.other_info = [
             f"{gong_obj.gong_tian_gan}{gong_obj.location}",  # 宫天干+ 宫位
             gong_obj.nei_zang,  # 内脏
@@ -70,8 +72,8 @@ class GongScreen(BoxLayout):
         t_r.add_widget(StarListScreen(star_list=self.stars.get("乙"), orientation=dui_qi_fang_shi))
         b_l.add_widget(StarListScreen(star_list=self.stars.get("丙"), orientation=dui_qi_fang_shi))
         b_r.add_widget(StarListScreen(star_list=self.stars.get("丁"), orientation=dui_qi_fang_shi))
-        m.add_widget(StarListScreen(star_list=self.other_info, orientation=dui_qi_fang_shi))
-        b_m.add_widget(StarListScreen(star_list=self.gong_info, orientation=dui_qi_fang_shi))
+        m.add_widget(StarListScreen(star_list=self.other_info, orientation=dui_qi_fang_shi,event=self.on_touch_up_envent(gong_obj.location)))
+        b_m.add_widget(StarListScreen(star_list=self.gong_info, orientation=dui_qi_fang_shi,event=self.on_touch_up_envent(gong_obj.location)))
 
         self.bind(size=self._update_rect, pos=self._update_rect)
 
@@ -79,14 +81,35 @@ class GongScreen(BoxLayout):
             Color(0, 0, 0, 1)  # set the color to red
             self.rect = Line(rectangle=(self.x, self.y, self.width, self.height), width=1)
 
+
+
     def _update_rect(self, instance, value):
         self.rect.rectangle = (self.x, self.y, self.width, self.height)
 
 
+    def on_touch_up_envent(self,location):
+
+        def ff(*args,**kwargs):
+            """
+            totch envent
+            :param touch:
+            :return:
+            """
+            self.screen_obj.torch_gong=location
+            self.screen_obj._update_rect(None,None)
+            #print(self.screen_obj.torch_gong)
+            return False
+
+        return ff
+
+
+
+
+
 class StarListScreen(BoxLayout):
     def __init__(self, star_list, **kwargs):
-        # kwargs["spacing"] = 10
 
+        event=kwargs.pop("event",None)
         self.align = ('left', 'top')
         super(StarListScreen, self).__init__(**kwargs)
         for star in star_list:
@@ -98,11 +121,48 @@ class StarListScreen(BoxLayout):
                 button.on_press = self.add_star_info(button)
 
             else:
-                button = Label(text=star)
+                button = Button(text=star)
+                button.on_press=event
             set_font(button)
             button.font_blended = True
             button.background_color = (1, 1, 1, 1)
-            self.add_widget(button)
+
+            # 四化星处理
+            flag=True
+            for temp in ["化权","化科","化禄","化忌"]:
+                if temp in star:
+                    new_star=BoxLayout(orientation="horizontal")
+                    star_name=star.split(" ")[0]
+                    button = Button(text=star_name,size=(30,30),size_hint=(1,None))
+                    button2 = Button(text=temp,size=(40,30),size_hint=(None,None), bold=True)
+                    button.info=res[1].info
+                    button2.info=self.find_star(temp)[1].info
+                    button.on_press = self.add_star_info(button)
+                    button2.on_press = self.add_star_info(button2)
+                    set_font(button,button2)
+
+                    button.background_color = (1, 1, 1, 1)
+                    button2.color =   "#0000FF"
+
+                    #button2.font_size =  button2.font_size+2
+
+                    button2.background_color = (1, 1, 1, 1)
+                    if temp == "化忌":
+                        button2.color = "#FF0000"
+
+
+
+                    new_star.add_widget(button)
+                    new_star.add_widget(button2)
+                    self.add_widget(new_star)
+                    flag=False
+
+
+            if flag :
+                self.add_widget(button)
+
+
+
 
     def find_star(self, star=""):
         flag = False

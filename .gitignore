@@ -5,3 +5,5 @@
 /dist/
 /exe安装包/
 /main.spec
+
+/make_setup_exe.iss

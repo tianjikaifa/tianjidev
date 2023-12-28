@@ -28,6 +28,7 @@ from tianji.ui.MingPanScreenUI import Pan
 from tianji.ui.FontSetModule import set_font, font_size
 from tianji.ui.logModule import Logger
 
+
 from kivy.config import Config
 
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
@@ -58,7 +59,7 @@ class MingPanDate(BoxLayout):
         self.label_widht = 70
         self.user_info_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "user_info")
         self.pai_pan = None  # 排盘委托方法
-        self.pan_windows = pan_windows  # AppScreen 对象
+        self.pan_windows = pan_windows  # AppDouShuScreen 对象
         self.gennaterUI()
 
     def gennaterUI(self):
@@ -198,7 +199,8 @@ class MingPanDate(BoxLayout):
         input.font_size = font_size - 2
 
         if item_type == "姓名":
-            input.text = "匿名"
+            input.text = "样例"
+            input.hint_text = "张三"
 
         if item_type in ["农历", "日历"]:
             input.hint_text = "2000-01-01-06"
@@ -433,5 +435,9 @@ class MingPanDate(BoxLayout):
         目前只有紫微斗数部分，后面会添加关于卦的部分
         有任何建议或使用遇到问题请联系我的邮箱
         103b6051@mail.nkut.edu.tw
-        """""
-        message_popup(txt)
+        或者直接扫码加群进行沟通
+        2023年12月28日 
+        """
+
+        txt=f"{txt}\n 当前版本 1.1.2 "
+        message_popup(txt,picture="tianji/data/picture/qun.jpg")

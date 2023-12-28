@@ -21,7 +21,7 @@ from kivy.uix.textinput import TextInput
 font_size = 22
 
 if kivy.platform == "win":
-    font_size = 17
+    font_size = 18
 
 font_path=os.path.join(os.path.dirname(os.path.dirname(__file__)),"data", "font","NotoSansSC-VariableFont_wght.ttf").replace("\\","/")
 
@@ -35,6 +35,7 @@ def set_font(*objs):
 
         if isinstance(obj, Button):
             obj.padding=10
+
 
 
         if isinstance(obj, TextInput):
