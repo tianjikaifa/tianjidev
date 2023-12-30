@@ -14,6 +14,7 @@ import os
 
 import kivy
 from kivy.uix.button import Button
+from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
@@ -30,6 +31,7 @@ def set_font(*objs):
         obj.font_size = font_size
         obj.bold = True
         obj.font_name = font_path
+
         if isinstance(obj, Label):
             obj.color = (0, 0, 0, 1)
 

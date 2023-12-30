@@ -31,6 +31,8 @@ class WhitePopup(Popup):
     def __init__(self, **kwargs):
         super(WhitePopup, self).__init__(**kwargs)
         self.auto_dismiss=False
+        self.background_color = (204, 204, 204, 1)
+
 
 
 class OpenFileDialog(WhitePopup):
@@ -41,6 +43,7 @@ class OpenFileDialog(WhitePopup):
         self.fun = fun
         self.default_dir = "" if default_dir is None else default_dir
         self.size_hint = (0.98, 0.98)
+        self.background_color=(0.5,0.5,0.5,0.5)
         self.init()
 
     def init(self):
@@ -166,17 +169,18 @@ class YesNoPopup(WhitePopup):
         content.spacing = 20
         operate = BoxLayout(orientation="horizontal", spacing=15, size_hint_y=0.15)
 
-        label_container = BoxLayout(orientation="vertical", spacing=30, size_hint_y=None)
+        label_container = BoxLayout(orientation="vertical", spacing=80, size_hint_y=None)
         label_container.bind(minimum_height=label_container.setter('height'))
         scroll_view = ScrollView()
         scroll_view.add_widget(label_container)
         message = "\n\n" + message
         lines = message.splitlines()
         for l in lines:
-            label = Label(text=l)
+            label = Label(text=l, text_size=(800, None))
             set_font(label)
-            label.color = (1, 1, 1, 1)
-            label.font_size = 22
+            #label.color = (1, 1, 1, 1)
+            label.font_size = font_size+2
+            label.font_halign = "left"
             label_container.add_widget(label)
 
         yes_button = Button(text='确定', size_hint=(1, None), size=(400, 40))
@@ -217,11 +221,19 @@ def message_popup(msg=None,picture=None):
                        size_hint=(0.98, None), size=(400, 1000))
 
     button = Button(text='确定', size_hint=(1, None), size=(400, 40))
-    label_container = BoxLayout(orientation="vertical", spacing=120, size_hint_y=None)
+    label_container = BoxLayout(orientation="vertical", spacing= 80, size_hint_x=1,size_hint_y=None)
     label_container.bind(minimum_height=label_container.setter('height'))
 
 
-    scroll_view = ScrollView()
+    scroll_view = ScrollView(size_hint=(1, 1))
+
+    # label = Label(text=msg, text_size=(400, None))
+    # set_font(label)
+    # label.color = (1, 1, 1, 1)
+    # label.font_size = font_size
+    # label.font_halign ="left"
+    #label_container.add_widget(label)
+
     title = "\n" + title
     lines = title.splitlines()
     for l in lines:
@@ -229,19 +241,18 @@ def message_popup(msg=None,picture=None):
         if l.strip() == "\n":
             continue
 
-        label = Label(text=l, text_size=(400, None))
-
+        label = Label(text=l, text_size=(800, None))
         set_font(label)
-        label.color = (1, 1, 1, 1)
-        label.font_size = font_size
+        #label.color = (1, 1, 1, 1)
+        label.font_size = font_size+2
+        label.font_halign = "left"
         label_container.add_widget(label)
 
     if not picture is None:
-        im=Image(source=picture,size_hint=(0.98, None), size=(400, 1000))
+        im=Image(source=picture,size_hint=(1, None), size=(400, 1000))
         label_container.add_widget(im)
 
     scroll_view.add_widget(label_container)
-    # contex.add_widget(label)
     contex.add_widget(scroll_view)
     contex.add_widget(button)
 
@@ -255,23 +266,6 @@ def message_popup(msg=None,picture=None):
 
 
 
-
-# class message_popup(Screen):
-#     count=0
-#     def __init__(self, msg=None, **kwargs):
-#         self.name=f"Message_{message_popup.count}"
-#         super(message_popup).__init__(**kwargs)
-#
-#         self.call_screen_name = screen_manager.current
-#         aa=Message2(msg)
-#         self.add_widget(aa)
-#         aa.open()
-#         screen_manager.add_widget(self)
-#         screen_manager.current = self.name
-#
-#     def close(self):
-#         screen_manager.remove_widget(self)
-#         screen_manager.current = self.call_screen
 
 
 class MyApp(App):

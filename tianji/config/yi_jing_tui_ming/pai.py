@@ -70,8 +70,6 @@ def get_yuan_tang_yao(gua, shi_zhi):
         shi_yin_yang = "阳"
 
 
-
-
 def wu_shu_ji_gong(year, yin_yang, gender):
     """
     计算先天卦时，天地数如果是5，那没有对应的卦，这时就要根据五数寄卦法
@@ -145,16 +143,17 @@ def get_xian_tian_gua(bazi, gender, year):
     yin_yang = shi_er_di_zhi_biao.get(zhis[0]).yin_yang
     yang_shu_he, yin_shu_he = get_tian_di_shu(gans, zhis)
 
-    print(yin_yang, gender)
-    tian_gan_number=25
-    di_zhi_number=30
-    tian_gua = qu_shu_gua(yang_shu_he,tian_gan_number)
-    print(tian_gua)
+    tian_gan_number = 25
+    di_zhi_number = 30
+    tian_gua = qu_shu_gua(yang_shu_he, tian_gan_number)
+
     tian_gua = wu_shu_ji_gong(year, yin_yang, gender) if tian_gua is None else tian_gua
-    di_gua = qu_shu_gua(yin_shu_he,di_zhi_number)
-    print(di_gua)
+    di_gua = qu_shu_gua(yin_shu_he, di_zhi_number)
+
     di_gua = wu_shu_ji_gong(year, yin_yang, gender) if di_gua is None else di_gua
     dang = get_xiang_dang(tian_gua, di_gua, yin_yang, gender=gender)
+
+    print(yin_yang, gender)
     print(tian_gua, di_gua, dang)
 
     return dang  # tian_gua, di_gua
@@ -170,16 +169,29 @@ def get_xiang_dang(tian_gua, di_gua, yin_yang, gender):
     """
 
     # 需要注意的是成卦字典里是先取下卦再取上卦，所以先取的是地数的卦
-    if yin_yang == "阳":
-        if gender == "男":
-            return gua_zu_he_biao.get(di_gua).get(tian_gua)
-        else:
-            return gua_zu_he_biao.get(tian_gua).get(di_gua)
-    else:
-        if gender == "女":
-            return gua_zu_he_biao.get(tian_gua).get(di_gua)
-        else:
-            return gua_zu_he_biao.get(di_gua).get(tian_gua)
+    a = gua_zu_he_biao.get(di_gua).get(tian_gua)
+    b = gua_zu_he_biao.get(tian_gua).get(di_gua)
+    biao = {
+        "男": {
+            "阳": a,
+            "阴": b
+        },
+        "女": {
+            "阳": b,
+            "阴": a
+        }
+    }
+    return biao.get(gender).get(yin_yang)
+    # if yin_yang == "阳":
+    #     if gender == "男":
+    #         return a
+    #     else:
+    #         return b
+    # else:
+    #     if gender == "女":
+    #         return a
+    #     else:
+    #         return b
 
 
 def qu_shu_gua(num, base_number):
@@ -188,7 +200,7 @@ def qu_shu_gua(num, base_number):
             return shu_gua.get(int(num / 10))
         return shu_gua.get(num - 10 * int(num / 10))
     else:
-        return qu_shu_gua(num - base_number,base_number)
+        return qu_shu_gua(num - base_number, base_number)
 
 
 def ff():
@@ -216,10 +228,8 @@ def ff():
 
 
 if __name__ == '__main__':
-
-    gender_ = "女"
+    gender_ = "男"
     year_ = 1999
-    bazi = "己卯 戊辰 庚戌 丙戌".replace(" ","")
+    bazi = "己卯 庚午 辛亥 癸巳".replace(" ", "")
 
-    xian_tian=get_xian_tian_gua(bazi, gender_,year_)
-
+    xian_tian = get_xian_tian_gua(bazi, gender_, year_)

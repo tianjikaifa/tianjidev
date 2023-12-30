@@ -42,7 +42,7 @@ class Star_Info:
         self.wuxing_list = wuxing_list
         self.dou_fen = dou_fen
         self.zhu_hua = zhu_hua
-        self.info=f"星耀:{name}     等级: {level}\n 所属:{dou_fen}  五行:{''.join(wuxing_list)}\n 主化:\n{zhu_hua}"
+        self.info=f"星耀:{name}     \n等级: {level}\n 所属:{dou_fen}  \n五行:{''.join(wuxing_list)}\n 主化:\n{zhu_hua}"
 
 
 class Si_Hua_Xing(Star_Info):

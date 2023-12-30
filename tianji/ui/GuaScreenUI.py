@@ -9,13 +9,15 @@
 表示64卦的窗体
 用来存放易经推命的流年卦部分内容
 """
+import os
+
 # ----------------------------------------------------------------------------------------------------------------------
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 
-from tianji.config.zi_wei_dou_shu.gua_config import gua_dict
+from tianji.config.zi_wei_dou_shu.gua_module import gua_dict
 from tianji.ui.DialogScreenUI import message_popup
 from tianji.ui.FontSetModule import set_font
 
@@ -48,7 +50,7 @@ class GuaUI(BoxLayout):
 
         view = ScrollView()
         view.add_widget(gua_items)
-        l=Label(text="岁   流年",size_hint=(1,None),size=(100,40))
+        l=Label(text="岁   流年卦",size_hint=(1,None),size=(100,40))
         set_font(l)
         self.add_widget(l)
         self.add_widget(view)
@@ -60,6 +62,7 @@ class GuaUI(BoxLayout):
             # print(btn.age)
             gua_msg = gua_dict.get(btn.gua_name, {"流年": "未定义的卦,也许是有问题需要解决"}).get("流年")
             res = f"{btn.gua_name}\n\n{gua_msg}"
-            message_popup(res)
+            tu_name = os.path.join(os.path.dirname(os.path.dirname(__file__)),"data","gua_picture","gu",f"{btn.gua_name}.png")
+            message_popup(res,tu_name)
 
         return ff

@@ -18,7 +18,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.config import Config
 from kivy.uix.label import Label
 
-from tianji.config.zi_wei_dou_shu.gua_config import LiuNianGua
+from tianji.config.zi_wei_dou_shu.gua_module import LiuNianGua
 from tianji.ui.BaseUI import MyScreen
 from tianji.ui.UserUI import MingPanDate
 from tianji.ui.MingPanScreenUI import Gong
@@ -37,13 +37,16 @@ class AppDouShuScreen(MyScreen):
         self.exit_fun = app.stop
         self.settings = app.open_settings
         self.__size_hint = (1.30, 1)
-        self.user = MingPanDate(self, size_hint=self.__size_hint)
-        self.user.pai_pan = self.pai_pan
-
+        self.can_be_draw_line = True
         self.torch_gong = "子"
+        self.draw_lines = []
+        self.ming_zhu_xing = ""
+        self.shen_zhu_xing = ""
         self.gongs = None
         self.init_time = True
         self.pad = 20
+        self.user = MingPanDate(self, size_hint=self.__size_hint)
+        self.user.pai_pan = self.pai_pan
 
         self.pai_pan()
 
@@ -53,14 +56,20 @@ class AppDouShuScreen(MyScreen):
             #Color(0.941, 0.368, 0, 0.5)  # set the color to red
             Color(0.50,0.5,0.5, 0.25)  # set the color to red
 
-            self.draw_lines = []
-            self.draw_lines.append(Line(points=[(0, 0), (300, 330)], width=1.1))
-            self.draw_lines.append(Line(points=[(0, 0), (300, 330)], width=1.3))
-            self.draw_lines.append(Line(points=[(0, 0), (300, 330)], width=1.1))
-            self.draw_lines.append(Line(points=[(0, 0), (300, 330)], width=1.1))
+
+            self.draw_lines.append(Line(points=[(0, 0), (0, 0)], width=1.1))
+            self.draw_lines.append(Line(points=[(0, 0), (0, 0)], width=1.3))
+            self.draw_lines.append(Line(points=[(0, 0), (0, 0)], width=1.1))
+            self.draw_lines.append(Line(points=[(0, 0), (0, 0)], width=1.1))
 
 
     def _update_rect(self, instance, value):
+        if not self.can_be_draw_line:
+            self.draw_lines[0].points = [[0, 0], [0, 0]]
+            self.draw_lines[1].points = [[0, 0], [0, 0]]
+            self.draw_lines[2].points = [[0, 0], [0, 0]]
+            self.draw_lines[3].points = [[0, 0], [0, 0]]
+            return
 
         w = (self.width - 2 * self.pad) // 8
         h = (self.height - 2 * self.pad) // 8
@@ -142,12 +151,6 @@ class AppDouShuScreen(MyScreen):
 
         self.lines = self.gong_line.get(self.torch_gong)
 
-        # def set_line(line):
-        #     line.dash_length = 10
-        #     line.dash_offset = 20
-        #
-        # for line in self.draw_lines:
-        #     set_line(line)
 
         def get_points(line_point):
             p1, p2 = line_point
@@ -166,12 +169,19 @@ class AppDouShuScreen(MyScreen):
             self.draw_lines[2].points = get_points(self.lines[2])
             self.draw_lines[3].points = get_points(self.lines[3])
 
+
     def pai_pan(self, ming_pan=None):
 
         if not ming_pan is None:
             # 设置是否是身宫
             ming_pan.gongs.get(ming_pan.shen_gong_location).shen_gong = True
             self.torch_gong = ming_pan.ming_gong_location
+            self.ming_zhu_xing = ming_pan.ming_zhu_xing
+            self.shen_zhu_xing = ming_pan.shen_zhu_xing
+            self.torch_gong = ming_pan.ming_gong_location
+
+
+            self._update_rect(None,None)
 
             gongs = {
                 "子": GongScreen(ming_pan.gongs.get("子"),self),
@@ -222,13 +232,13 @@ class AppDouShuScreen(MyScreen):
         else:
             old = self.user
             self.user = MingPanDate(self, size_hint=self.__size_hint)
-            self.user.update_ming_pan_time(old)
+            self.user.update_ming_pan_date(old)
             old.clear_widgets()
             old = None
             mid_shui_ping.add_widget(self.user)
 
-        #mid_shui_ping.add_widget(GuaUI(self.guas, size_hint=(2 - 0.05 - self.__size_hint[0], 1)))
-        mid_shui_ping.add_widget(Label( size_hint=(2 - 0.05 - self.__size_hint[0], 1)))
+        mid_shui_ping.add_widget(GuaUI(self.guas, size_hint=(2 - 0.05 - self.__size_hint[0], 1)))
+        #mid_shui_ping.add_widget(Label( size_hint=(2 - 0.05 - self.__size_hint[0], 1)))
         mid_shui_ping.add_widget(Label(size_hint=(0.05, 1)))
         mid_shui_ping.add_widget(zhong_you)
         root.add_widget(mid_shui_ping)
@@ -241,12 +251,15 @@ class AppDouShuScreen(MyScreen):
         root.add_widget(shui_ping_4)
         self.add_widget(root)
 
-        self.update_gua(ming_pan)
+        self.update_user_config(ming_pan)
 
-    def update_gua(self, ming_pan=None):
+    def update_user_config(self, ming_pan=None):
         if ming_pan is None:
-            self.user.user_info.get("先天").text = "未排盘"
-            self.user.user_info.get("后天").text = "未排盘"
+            self.user.user_info.get("先天卦").text = "未排盘"
+            self.user.user_info.get("后天卦").text = "未排盘"
+
+            self.user.user_info.get("命主星").text =""
+            self.user.user_info.get("身主星").text =""
         else:
             pai_pan_bazi = []
             for item in ming_pan.ba_zi:
@@ -257,10 +270,19 @@ class AppDouShuScreen(MyScreen):
             self.user.user_info.get("四柱").text = "".join(ming_pan.ba_zi)
             self.user.user_info.get("五行局").text = ming_pan.wu_xing_jv_name
             self.user.user_info.get("阴阳男女").text = f"{ming_pan.yin_yang}{ming_pan.gender}"
+            self.user.user_info.get("命主星").text =self.ming_zhu_xing
+            self.user.user_info.get("身主星").text = self.shen_zhu_xing
+
+
 
             # TODO 需要在这写下更新先天卦和后天卦
-            # self.user.user_info.get("先天").text = "坤为地"
-            # self.user.user_info.get("后天").text = "地山谦"
+
+            self.user.user_info.get("后天卦").text = "待开发"
+            self.user.user_info.get("后天卦").text = "待开发"
+
+    def on_switch_change(self,value):
+        self.can_be_draw_line=value
+        self._update_rect(None,None)
 
     def default_gongs(self):
         gong = {
@@ -288,8 +310,8 @@ class AppDouShuScreen(MyScreen):
         child = None
         gc.collect()
 
-        self.user.user_info.get("先天").text = "未排盘"
-        self.user.user_info.get("后天").text = "未排盘"
+
+
 
 
 # 易经推命部分
@@ -319,8 +341,8 @@ class AppYiJingScreen(MyScreen):
 
     def update_gua(self, ming_pan=None):
         if ming_pan is None:
-            self.user.user_info.get("先天").text = "未排盘"
-            self.user.user_info.get("后天").text = "未排盘"
+            self.user.user_info.get("先天卦").text = "未排盘"
+            self.user.user_info.get("后天卦").text = "未排盘"
         else:
             pai_pan_bazi = []
             for item in ming_pan.ba_zi:
@@ -334,5 +356,5 @@ class AppYiJingScreen(MyScreen):
             self.user.gender_radio.get(ming_pan.gender).active = True
 
             # TODO 需要在这写下更新先天卦和后天卦
-            self.user.user_info.get("先天").text = "待开发"
-            self.user.user_info.get("后天").text = "待开发"
+            self.user.user_info.get("先天卦").text = "待开发"
+            self.user.user_info.get("后天卦").text = "待开发"

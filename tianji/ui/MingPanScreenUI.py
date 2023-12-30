@@ -11,7 +11,7 @@
 
 # ----------------------------------------------------------------------------------------------------------------------
 from datetime import datetime
-from tianji.config.zi_wei_dou_shu.gong import Gong
+from tianji.config.zi_wei_dou_shu.gong_module import Gong
 from tianji.config.zi_wei_dou_shu.zhu_xing_biao_module import bei_dou_zhu_xing_biao, nan_dou_zhu_xing_biao
 from tianji.config.zi_wei_dou_shu.wu_xing_jv_biao_module import Wu_Xing
 from tianji.config.zi_wei_dou_shu.yu_gong_biao_module import Yu_Gong
