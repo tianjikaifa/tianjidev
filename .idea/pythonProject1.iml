@@ -11,6 +11,7 @@
       <excludeFolder url="file://$MODULE_DIR$/exe安装包" />
       <excludeFolder url="file://$MODULE_DIR$/tianji/config/yi_jing_tui_ming/.pytest_cache/v" />
       <excludeFolder url="file://$MODULE_DIR$/tianji/data/gua_picture/jin" />
+      <excludeFolder url="file://$MODULE_DIR$/tianji/data/gua_picture" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.10 (appENV)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
