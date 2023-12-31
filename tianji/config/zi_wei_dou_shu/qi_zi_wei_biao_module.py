@@ -13,7 +13,10 @@
 # 需要注意紫微表现在使用的键是数字，而json中使用的是字符串
 import json
 import os
-json_file = os.path.join(os.path.dirname(__file__), "../../data/jsonfile", "zi_wei_biao.json")
+
+from tianji.proj_config import my_dir
+
+json_file = os.path.join(my_dir, "data","jsonfile",  "zi_wei_biao.json")
 zi_wei_biao = None
 with open(json_file, "r", encoding="utf-8") as f:
     zi_wei_biao = json.load(f)

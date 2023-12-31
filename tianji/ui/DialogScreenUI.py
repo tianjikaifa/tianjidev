@@ -250,6 +250,7 @@ def message_popup(msg=None,picture=None):
 
     if not picture is None:
         im=Image(source=picture,size_hint=(1, None), size=(400, 1000))
+
         label_container.add_widget(im)
 
     scroll_view.add_widget(label_container)

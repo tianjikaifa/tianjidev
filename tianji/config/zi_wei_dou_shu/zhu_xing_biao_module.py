@@ -15,6 +15,8 @@
 import json
 import os
 
+from tianji.proj_config import my_dir
+
 # 紫微星所在的宫为键，对应星辰的名称取值为对应位置,
 # 其中包含了没指定的南斗星君-天府星，但是天府星不在北斗星系里
 # bei_dou_zhu_xing_biao = {
@@ -115,7 +117,7 @@ import os
 #         "天府": "巳",
 #     },
 # }
-json_file = os.path.join(os.path.dirname(__file__), "../../data/jsonfile", "bei_dou_zhu_xing_biao.json")
+json_file = os.path.join(my_dir, "data","jsonfile", "bei_dou_zhu_xing_biao.json")
 bei_dou_zhu_xing_biao = None
 with open(json_file, "r", encoding="utf-8") as f:
     bei_dou_zhu_xing_biao = json.load(f)
@@ -219,7 +221,7 @@ with open(json_file, "r", encoding="utf-8") as f:
 #         "七杀": "巳",
 #         "破军": "酉"},
 # }
-json_file = os.path.join(os.path.dirname(__file__), "../../data/jsonfile", "nan_dou_zhu_xing_biao.json")
+json_file = os.path.join(my_dir, "data","jsonfile", "nan_dou_zhu_xing_biao.json")
 nan_dou_zhu_xing_biao = None
 with open(json_file, "r", encoding="utf-8") as f:
     nan_dou_zhu_xing_biao = json.load(f)

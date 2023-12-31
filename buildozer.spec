@@ -29,7 +29,7 @@ source.exclude_dirs = tests, bin, venv,build,dist
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 1.1.2
+version = 1.1.3
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -37,7 +37,7 @@ version = 1.1.2
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,pillow,lunar_python
+requirements = python3,kivy,kivymd,Pillow,lunar_python
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -416,6 +416,7 @@ warn_on_root = 1
 
 # (str) Path to build output (i.e. .apk, .aab, .ipa) storage
 bin_dir = ./bin
+
 
 #    -----------------------------------------------------------------------------
 #    List as sections

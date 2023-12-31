@@ -11,6 +11,8 @@
 import json
 import os
 
+from tianji.proj_config import my_dir
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 wu_xing_list = {
@@ -180,7 +182,7 @@ class Wu_Xing:
         #     }
         # }
 
-        json_file = os.path.join(os.path.dirname(__file__), "../../data/jsonfile", "wu_xing_jv_biao.json")
+        json_file = os.path.join(my_dir, "data","jsonfile", "wu_xing_jv_biao.json")
         with open(json_file, "r", encoding="utf-8") as f:
             self.wu_xing_jv_biao = json.load(f)
         wuxing=self.wu_xing_jv_biao.get(self.nian_gan).get(self.ming_gong)

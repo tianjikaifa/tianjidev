@@ -23,16 +23,19 @@
 　　陷，又叫落陷：星无光，无数可得，吉星无用，凶星最凶。
 
 """
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 """
-在丑宫的天机星，不知道是落陷还是入庙，这里先按落陷处理
+在丑宫的天机星，不知道是落陷还是入庙，其他软件都是落陷，所以这里先按落陷处理
 """
 
 import json
 import os
+from tianji.proj_config import my_dir
 
-json_file=os.path.join(os.path.dirname(__file__), "../../data/jsonfile", "liang_du_biao.json")
+json_file=os.path.join(my_dir, "data","jsonfile",  "liang_du_biao.json")
 liang_du_biao=None
 with open(json_file, "r", encoding="utf-8") as f:
     liang_du_biao = json.load(f)

@@ -13,6 +13,7 @@ import os
 
 # ----------------------------------------------------------------------------------------------------------------------
 from tianji.config.zi_wei_dou_shu.shi_er_di_zhi_biao_module import Di_Zhi_Iter, di_zhi
+from tianji.proj_config import my_dir
 
 """
 用来根据月和时辰确定斗君在哪个宫起子，然后顺数流年到年支，哪个宫就是流年的斗君
@@ -202,7 +203,7 @@ class Dou_jun:
         #         "戌": "亥",
         #         "亥": "子"},
         # }
-        json_file = os.path.join(os.path.dirname(__file__), "../../data/jsonfile", "dou_jun_biao.json")
+        json_file = os.path.join(my_dir, "data","jsonfile", "dou_jun_biao.json")
         dou_jun_biao = None
         with open(json_file, "r", encoding="utf-8") as f:
             dou_jun_biao = json.load(f)

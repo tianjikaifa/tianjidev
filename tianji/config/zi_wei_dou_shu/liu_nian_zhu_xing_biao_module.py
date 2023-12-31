@@ -13,6 +13,9 @@
 # ----------------------------------------------------------------------------------------------------------------------
 import json
 import os
+
+from tianji.proj_config import my_dir
+
 """
 按流年地支起将星，
 安流年将前诸星表
@@ -25,11 +28,11 @@ class Liu_Nian_Xing:
     def __init__(self, nian_zhi):
         self.__nian_zhi = nian_zhi
         # 安流年将前诸星表
-        json_file = os.path.join(os.path.dirname(__file__), "../../data/jsonfile", "jiang_xing_biao.json")
+        json_file = os.path.join(my_dir, "data","jsonfile",  "jiang_xing_biao.json")
         with open(json_file, "r", encoding="utf-8") as f:
             self.jiang_xing_biao = json.load(f)
 
-        json_file = os.path.join(os.path.dirname(__file__), "../../data/jsonfile", "sui_jian_biao.json")
+        json_file = os.path.join(my_dir, "data","jsonfile",  "sui_jian_biao.json")
         with open(json_file, "r", encoding="utf-8") as f:
             self.sui_jian_biao = json.load(f)
 

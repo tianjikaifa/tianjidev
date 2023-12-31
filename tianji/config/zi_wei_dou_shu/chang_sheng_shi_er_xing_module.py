@@ -14,7 +14,9 @@
 import json
 import os
 
-json_file=os.path.join(os.path.dirname(__file__), "../../data/jsonfile", "chang_sheng_shi_er_xing_biao.json")
+from tianji.proj_config import my_dir
+
+json_file=os.path.join(my_dir, "data","jsonfile",  "chang_sheng_shi_er_xing_biao.json")
 chang_sheng_shi_er_xing_biao=None
 with open(json_file, "r", encoding="utf-8") as f:
     chang_sheng_shi_er_xing_biao = json.load(f)

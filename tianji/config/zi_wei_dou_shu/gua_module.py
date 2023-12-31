@@ -13,9 +13,9 @@
 import json
 import os
 
+from tianji.proj_config import my_dir
 
-
-json_file = os.path.join(os.path.dirname(__file__), "../../data/jsonfile", "gua_dict.json")
+json_file = os.path.join(my_dir, "data","jsonfile",  "gua_dict.json")
 gua_dict = None
 with open(json_file, "r", encoding="utf-8") as f:
     gua_dict = json.load(f)
