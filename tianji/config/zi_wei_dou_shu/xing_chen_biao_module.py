@@ -9,7 +9,7 @@
 表示所有用到得星辰
 """
 # ----------------------------------------------------------------------------------------------------------------------
-# TODO
+
 """
 描述诸星分属南北斗五行并化吉凶信息的类
 四化星等级设置为-"甲"-丁，表示所有的星都排干净了才排它们
@@ -22,14 +22,14 @@
 缺少吊客星，先按串客星补上，
 
 地空地劫改为甲级星耀
-左辅右弼改为甲级星耀
+//左辅右弼改为甲级星耀
 天马改为甲级星耀
 
 """
 
 
 class Star_Info:
-    def __init__(self, level="甲", name="", dou_fen="", zhu_hua="", wuxing_list=[]):
+    def __init__(self, level="甲", name="", dou_fen="", zhu_hua="", wuxing_list=[], start_location=None):
         """
         :param level: 星辰等级("甲"-4)
         :param name: 名称
@@ -38,11 +38,12 @@ class Star_Info:
         :param wuxing_list: 五行所属列表，允许空列表，但不要不传参
         """
         self.level = level
+        self.start_location = level if start_location is None else start_location
         self.name = name
         self.wuxing_list = wuxing_list
         self.dou_fen = dou_fen
         self.zhu_hua = zhu_hua
-        self.info=f"星耀:{name}     \n等级: {level}\n 所属:{dou_fen}  \n五行:{''.join(wuxing_list)}\n 主化:\n{zhu_hua}"
+        self.info = f"星耀:\n{name}     \n等级: \n{self.level}\n 所属:\n{dou_fen}  \n五行:\n{''.join(wuxing_list)}\n 主化:\n{zhu_hua}"
 
 
 class Si_Hua_Xing(Star_Info):
@@ -82,9 +83,9 @@ dou_shu_stars = {
     "陀罗": Star_Info("甲", "陀罗", "北助", "忌", ["金"]),
     "火星": Star_Info("甲", "火星", "南助", "杀", ["火"]),
     "铃星": Star_Info("甲", "铃星", "南助", "杀", ["火"]),
-    "地劫": Star_Info("甲", "地劫", "    ", "多灾", ["火"]),
-    "地空": Star_Info("甲", "地空", "    ", "失", ["火"]),
-    "天马": Star_Info("甲", "天马", "    ", "主动", ["火"]),
+    "地劫": Star_Info("乙", "地劫", "    ", "多灾", ["火"],"甲"),
+    "地空": Star_Info("乙", "地空", "    ", "失", ["火"],"甲"),
+    "天马": Star_Info("乙", "天马", "    ", "主动", ["火"],"甲"),
 
     "化禄": Si_Hua_Xing("四化", "化禄", "    ", "财禄", ["土"]),
     "化权": Si_Hua_Xing("四化", "化权", "    ", "权势", ["木"]),

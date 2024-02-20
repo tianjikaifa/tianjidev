@@ -8,13 +8,11 @@
 """
 按流年地支起将星，但是我没搞清楚到底是出生就固定还是每年都不一样
 """
-
-
 # ----------------------------------------------------------------------------------------------------------------------
-import json
-import os
 
-from tianji.proj_config import my_dir
+
+from tianji.config.json_module import jiang_xing_biao, sui_jian_biao
+
 
 """
 按流年地支起将星，
@@ -27,14 +25,8 @@ from tianji.proj_config import my_dir
 class Liu_Nian_Xing:
     def __init__(self, nian_zhi):
         self.__nian_zhi = nian_zhi
-        # 安流年将前诸星表
-        json_file = os.path.join(my_dir, "data","jsonfile",  "jiang_xing_biao.json")
-        with open(json_file, "r", encoding="utf-8") as f:
-            self.jiang_xing_biao = json.load(f)
-
-        json_file = os.path.join(my_dir, "data","jsonfile",  "sui_jian_biao.json")
-        with open(json_file, "r", encoding="utf-8") as f:
-            self.sui_jian_biao = json.load(f)
+        self.sui_jian_biao=sui_jian_biao
+        self.jiang_xing_biao=jiang_xing_biao
 
         # self.jiang_xing_biao = {
         #     "寅": {

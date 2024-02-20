@@ -22,7 +22,7 @@ class Di_Zhi_Iter:
         """
         根据命宫在那个宫更新此人的迭代器，用于后面的余宫使用
         也会在别的方面用到
-        :param current_location:设置当前位置
+        :param current_location:设置当前位置,子丑寅卯
         :return:
         """
         flag=True

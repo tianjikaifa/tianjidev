@@ -24,22 +24,16 @@
 
 """
 
-
 # ----------------------------------------------------------------------------------------------------------------------
 
 """
 在丑宫的天机星，不知道是落陷还是入庙，其他软件都是落陷，所以这里先按落陷处理
 """
 
-import json
-import os
-from tianji.proj_config import my_dir
+from tianji.config.json_module import liang_du_biao
 
-json_file=os.path.join(my_dir, "data","jsonfile",  "liang_du_biao.json")
-liang_du_biao=None
-with open(json_file, "r", encoding="utf-8") as f:
-    liang_du_biao = json.load(f)
 
+liang_du_biao
 # liang_du_biao = {
 #     "子": {
 #         "天机": "庙",

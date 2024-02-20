@@ -13,25 +13,21 @@
 文昌、文曲
 地空、地劫
 台辅，封诰
+
+根据年支和出生时辰确定的甲级星 火星、铃星
+先本生年支，再取对应的星辰，再安出生时辰取值得到该星对应的宫
+
 """
 # ----------------------------------------------------------------------------------------------------------------------
-# 根据年支和出生时辰确定的甲级星 火星、铃星
-# 先本生年支，再取对应的星辰，再安出生时辰取值得到该星对应的宫
 
-import json
-import os
 
-from tianji.proj_config import my_dir
 
-json_file = os.path.join(my_dir, "data","jsonfile",  "huo_ling_xing_biao.json")
-huo_ling_xing_biao = None
-with open(json_file, "r", encoding="utf-8") as f:
-    huo_ling_xing_biao = json.load(f)
+from tianji.config.json_module import huo_ling_xing_biao, shi_chen_xing_biao
 
-json_file = os.path.join(my_dir, "data","jsonfile",  "shi_chen_xing_biao.json")
-shi_chen_xing_biao = None
-with open(json_file, "r", encoding="utf-8") as f:
-    shi_chen_xing_biao = json.load(f)
+
+
+
+
 
 
 if __name__ == '__main__':

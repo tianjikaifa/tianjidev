@@ -88,7 +88,7 @@ class Gong:
 
     def append_start(self, star_info):
         star_name = star_info.name
-        level = star_info.level
+        level = star_info.start_location
         if level != "四化":  # 不是四化星的直接加
             self.stars.get(level).append(f"{star_name}{liang_du_biao.get(self.location).get(star_name, '')}")
         else:

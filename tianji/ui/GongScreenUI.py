@@ -24,9 +24,7 @@ from tianji.ui.FontSetModule import set_font
 class GongScreen(BoxLayout):
     def __init__(self, gong_obj=None,screen_obj=None, **kwargs):
         kwargs["orientation"] = "vertical"
-        kwargs["padding"] = 10
-
-
+        kwargs["padding"] = 5
         super(GongScreen, self).__init__(**kwargs)
 
         self.screen_obj=screen_obj
@@ -65,8 +63,8 @@ class GongScreen(BoxLayout):
         self.add_widget(m)
         self.add_widget(b)
         t.size_hint_y = 0.5
-        m.size_hint_y = 0.15
-        b.size_hint_y = 0.35
+        m.size_hint_y = 0.16
+        b.size_hint_y = 0.34
         dui_qi_fang_shi = "vertical"  # horizontal
         t_l.add_widget(StarListScreen(star_list=self.stars.get("甲"), orientation=dui_qi_fang_shi))
         t_r.add_widget(StarListScreen(star_list=self.stars.get("乙"), orientation=dui_qi_fang_shi))
@@ -122,10 +120,15 @@ class StarListScreen(BoxLayout):
 
             else:
                 button = Button(text=star)
-                button.on_press=event
+                if not event is None:
+                    button.on_press=event
+
             set_font(button)
             button.font_blended = True
             button.background_color = (1, 1, 1, 1)
+
+            if "顺行" in star or "逆行" in star:
+                button.color = "#FF0000"
 
             # 四化星处理
             flag=True
@@ -134,21 +137,26 @@ class StarListScreen(BoxLayout):
                     new_star=BoxLayout(orientation="horizontal")
                     star_name=star.split(" ")[0]
                     button = Button(text=star_name,size=(30,30),size_hint=(1,None))
-                    button2 = Button(text=temp,size=(40,30),size_hint=(None,None), bold=True)
+                    button2 = Button(text=temp,size=(40,22),size_hint=(None,None), bold=True)
                     button.info=res[1].info
                     button2.info=self.find_star(temp)[1].info
                     button.on_press = self.add_star_info(button)
                     button2.on_press = self.add_star_info(button2)
                     set_font(button,button2)
 
+
+                    # button2.color =  "#3A500A"
+                    # button2.background_color = (0.949,0.729,0.007, 1)
+                    button2.color = (1, 1, 1, 1)
+                    button2.background_color =  "#5EB125"
+                    #button2.color = "#087982"
+                    #button2.background_color = (1, 1, 1, 1)
                     button.background_color = (1, 1, 1, 1)
-                    button2.color =   "#0000FF"
 
-                    #button2.font_size =  button2.font_size+2
-
-                    button2.background_color = (1, 1, 1, 1)
                     if temp == "化忌":
-                        button2.color = "#FF0000"
+                        #button2.color = "#FF0000"
+                        button2.color = (1, 1, 1, 1)
+                        button2.background_color = "#EE545E"
 
 
 

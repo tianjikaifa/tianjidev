@@ -1,19 +1,19 @@
 [app]
 
 # (str) Title of your application
-title = 天纪排盘
+title = 紫易哲学
 
 # (str) Package name
 package.name = tianji
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = com.huangfujue.tianji
+package.domain = com.huangfujue
 
 # (str) Source code where the main.py live
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,ttf,json
+source.include_exts = py,png,jpg,kv,atlas,ttf,json,db
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = assets/*,images/*.png
@@ -29,7 +29,7 @@ source.exclude_dirs = tests, bin, venv,build,dist
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 1.1.3
+version = 1.2.4
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -37,7 +37,7 @@ version = 1.1.3
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,Pillow,lunar_python
+requirements = python3,kivy,plyer,lunar_python
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -45,9 +45,10 @@ requirements = python3,kivy,kivymd,Pillow,lunar_python
 
 # (str) Presplash of the application
 #presplash.filename = %(source.dir)s/fount.ttf
+presplash.filename = %(source.dir)s/tianji/data/picture/start_img.png
 
 # (str) Icon of the application
-#icon.filename = %(source.dir)s/data/icon.png
+icon.filename = %(source.dir)s/tianji/data/picture/app.ico
 
 # (list) Supported orientations
 # Valid options are: landscape, portrait, portrait-reverse or landscape-reverse
@@ -74,7 +75,7 @@ osx.kivy_version = 1.9.1
 #
 
 # (bool) Indicate if the application should be fullscreen or not
-fullscreen = 1
+fullscreen = 0
 
 # (string) Presplash background color (for android toolchain)
 # Supported formats are: #RRGGBB #AARRGGBB or one of the following names:
@@ -96,10 +97,8 @@ fullscreen = 1
 # (list) Permissions
 # (See https://python-for-android.readthedocs.io/en/latest/buildoptions/#build-options-1 for all the supported syntaxes and properties)
 #android.permissions = android.permission.INTERNET, (name=android.permission.WRITE_EXTERNAL_STORAGE;maxSdkVersion=18)
+android.permissions =WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 #permissions: READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE
-permissions:
-  - READ_EXTERNAL_STORAGE
-  - WRITE_EXTERNAL_STORAGE
 # android.gradle_target = assemble
 # (list) features (adds uses-feature -tags to manifest)
 #android.features = android.hardware.usb.host

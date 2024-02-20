@@ -11,11 +11,10 @@
 """
 
 # ----------------------------------------------------------------------------------------------------------------------
-import json
-import os
 
+
+from tianji.config.json_module import ming_zhu_biao, shen_zhu_biao
 from tianji.config.zi_wei_dou_shu.shi_er_di_zhi_biao_module import Di_Zhi_Iter, di_zhi
-from tianji.proj_config import my_dir
 
 
 class Ming_Shen_Gong:
@@ -62,10 +61,7 @@ class Ming_Zhu:
         #     "戌": "禄存",
         #     "亥": "巨门",
         # }
-        json_file = os.path.join(my_dir, "data","jsonfile", "ming_zhu_biao.json")
-        ming_zhu_biao = None
-        with open(json_file, "r", encoding="utf-8") as f:
-            ming_zhu_biao = json.load(f)
+
         self.__ming_gong = ming_gong
         self.命主 = ming_zhu_biao.get(ming_gong)
 
@@ -87,10 +83,7 @@ class Shen_Zhu:
         #     "戌": "文昌",
         #     "亥": "天机",
         # }
-        json_file = os.path.join(my_dir, "data","jsonfile", "shen_zhu_biao.json")
-        shen_zhu_biao = None
-        with open(json_file, "r", encoding="utf-8") as f:
-            shen_zhu_biao = json.load(f)
+
         self.身主 = shen_zhu_biao.get(nian_zhi)
 
 

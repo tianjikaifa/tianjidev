@@ -45,7 +45,7 @@ class Tian_Gan_Iter:
     def update(self, start):
         """
         设置天干起始位置
-        :param start:
+        :param start: 甲乙并丁
         :return:
         """
         flag = True

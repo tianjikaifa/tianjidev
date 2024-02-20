@@ -15,4 +15,14 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 
 screen_manager = ScreenManager()
 main_screen = Screen(name="main_screen")
+users_screen = Screen(name="users_screen")
 screen_manager.add_widget(main_screen)
+screen_manager.add_widget(users_screen)
+
+
+def main_win(*args,**kwargs):
+    screen_manager.current="main_screen"
+
+
+def users_ui(*args,**kwargs):
+    screen_manager.current="users_screen"

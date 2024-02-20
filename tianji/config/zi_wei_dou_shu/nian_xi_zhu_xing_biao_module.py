@@ -14,26 +14,14 @@
 import json
 import os
 
+from tianji.config.json_module import nian_gan_xing_biao, si_hua_xing_biao, nian_zhi_xing_biao
 # ----------------------------------------------------------------------------------------------------------------------
 from tianji.config.zi_wei_dou_shu.shi_er_di_zhi_biao_module import di_zhi, Di_Zhi_Iter
 from tianji.config.zi_wei_dou_shu.ming_gong_shen_gong_module import Ming_Shen_Gong
 from tianji.config.zi_wei_dou_shu.yu_gong_biao_module import Yu_Gong
 from tianji.proj_config import my_dir
 
-json_file = os.path.join(my_dir, "data","jsonfile", "nian_gan_xing_biao.json")
-nian_gan_xing_biao = None
-with open(json_file, "r", encoding="utf-8") as f:
-    nian_gan_xing_biao = json.load(f)
 
-json_file = os.path.join(my_dir, "data","jsonfile", "si_hua_xing_biao.json")
-si_hua_xing_biao = None
-with open(json_file, "r", encoding="utf-8") as f:
-    si_hua_xing_biao = json.load(f)
-
-json_file = os.path.join(my_dir, "data","jsonfile", "nian_zhi_xing_biao.json")
-nian_zhi_xing_biao = None
-with open(json_file, "r", encoding="utf-8") as f:
-    nian_zhi_xing_biao = json.load(f)
 
 
 """

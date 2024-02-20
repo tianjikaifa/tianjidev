@@ -12,27 +12,23 @@
 # ----------------------------------------------------------------------------------------------------------------------
 import os
 from kivy.app import App
-from kivy.graphics import Color, Rectangle
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.image import Image
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button, Label
-from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 
-from tianji.ui.FontSetModule import set_font, font_size
-from tianji.ui.screen_manager_module import  screen_manager
+from tianji.ui.FontSetModule import set_font  , font_size
+from tianji.ui.screen_manager_module import screen_manager
 
 
 class WhitePopup(Popup):
 
     def __init__(self, **kwargs):
         super(WhitePopup, self).__init__(**kwargs)
-        self.auto_dismiss=False
+        self.auto_dismiss = False
         self.background_color = (204, 204, 204, 1)
-
 
 
 class OpenFileDialog(WhitePopup):
@@ -43,29 +39,31 @@ class OpenFileDialog(WhitePopup):
         self.fun = fun
         self.default_dir = "" if default_dir is None else default_dir
         self.size_hint = (0.98, 0.98)
-        self.background_color=(0.5,0.5,0.5,0.5)
+        self.background_color = (0.5, 0.5, 0.5, 0.5)
         self.init()
 
     def init(self):
 
-        layout = BoxLayout(orientation='vertical')
-        btn_height = 45
-        btn_layout = BoxLayout(size_hint=(1, None), size=(180, btn_height), spacing=15)
+        layout = BoxLayout(orientation='vertical',size_hint=(0.98, 0.98))
+        btn_height = 0.25
+        btn_widht = 0.3
+        #btn_layout = BoxLayout(size_hint=(1, None), size=(180, btn_height), spacing=15)
+        btn_layout = BoxLayout(size_hint=(1, 0.1), spacing=15)
 
-        select_button = Button(text='打开', on_press=self.select_file, size_hint=(None, None), size=(180, btn_height))
-        chanel_button = Button(text='取消', on_press=self.chanel, size_hint=(None, None), size=(180, btn_height))
-        delete_button = Button(text='删除', on_press=self.delete_file, size_hint=(None, None), size=(180, btn_height))
-        self.filechooser = FileChooserIconView(path=self.default_dir, dirselect=False, size_hint=(0.9, 0.9))
-
+        select_button = Button(text='打开', on_press=self.select_file, size_hint_y=btn_height, size_hint_x=btn_widht)
+        chanel_button = Button(text='取消', on_press=self.chanel, size_hint_y=btn_height, size_hint_x=btn_widht)
+        delete_button = Button(text='删除', on_press=self.delete_file, size_hint_y=btn_height, size_hint_x=btn_widht)
+        self.filechooser = FileChooserIconView(path=self.default_dir, dirselect=False, size_hint=(1, 0.5))
+        #self.filechooser = FileChooserIconView(path=self.default_dir, dirselect=False, size_hint=(0.9, None))
         set_font(select_button, chanel_button, delete_button, self, self.filechooser)
 
         btn_layout.add_widget(chanel_button)
-        btn_layout.add_widget(Label(size_hint=(1, None), size=(180, btn_height)))
+        btn_layout.add_widget(Label(size_hint=(1, btn_height)))
         btn_layout.add_widget(select_button)
         btn_layout.add_widget(delete_button)
         layout.add_widget(btn_layout)
         layout.add_widget(self.filechooser)
-        # self.add_widget(layout)
+        #self.add_widget(layout)
         self.content = layout
 
     def select_file(self, instance):
@@ -165,32 +163,30 @@ class YesNoPopup(WhitePopup):
     def __init__(self, message="", operate_fun=None, **kwargs):
         super(YesNoPopup, self).__init__(**kwargs)
         self.operate_fun = operate_fun
+        self.size_hint = (0.98, 0.8)
+        self.title = ""
         content = BoxLayout(orientation="vertical")
         content.spacing = 20
-        operate = BoxLayout(orientation="horizontal", spacing=15, size_hint_y=0.15)
+        operate = BoxLayout(orientation="horizontal", spacing=15, size_hint_y=0.1)
 
-        label_container = BoxLayout(orientation="vertical", spacing=80, size_hint_y=None)
+        label_container = BoxLayout(orientation="vertical", spacing=200, size_hint_y=None)
         label_container.bind(minimum_height=label_container.setter('height'))
         scroll_view = ScrollView()
         scroll_view.add_widget(label_container)
-        message = "\n\n" + message
+        message = "\n" + message
         lines = message.splitlines()
         for l in lines:
             label = Label(text=l, text_size=(800, None))
             set_font(label)
-            #label.color = (1, 1, 1, 1)
+            # label.color = (1, 1, 1, 1)
             label.font_size = font_size+2
             label.font_halign = "left"
             label_container.add_widget(label)
 
-        yes_button = Button(text='确定', size_hint=(1, None), size=(400, 40))
-        no_button = Button(text='取消', size_hint=(1, None), size=(400, 40))
+        yes_button = Button(text='确定', size_hint=(1, 0.5))
+        no_button = Button(text='取消', size_hint=(1, 0.5))
         operate.add_widget(yes_button)
         operate.add_widget(no_button)
-
-        self.size = (400, 800)
-        self.size_hint = (0.98, None)
-        self.title = ""
 
         content.add_widget(scroll_view)
         content.add_widget(operate)
@@ -213,28 +209,28 @@ class YesNoPopup(WhitePopup):
         self.res = True
 
 
-def message_popup(msg=None,picture=None):
+def message_popup(msg=None, *args, **kwargs):
     title = '你的输入有误，请检查 ' if msg is None else msg
     contex = BoxLayout(orientation="vertical")
     popup = WhitePopup(title="",
                        content=None,
-                       size_hint=(0.98, None), size=(400, 1000))
+                       size_hint=(0.98, 0.7)
+                       # size_hint=(0.98, None)
+                       # , size=(400, 1000)
+                       )
 
-    button = Button(text='确定', size_hint=(1, None), size=(400, 40))
-    label_container = BoxLayout(orientation="vertical", spacing= 80, size_hint_x=1,size_hint_y=None)
+    # button = Button(text='确定', size_hint=(1, None), size=(400, 40))
+    button = Button(text='确定', size_hint=(1, 0.03))
+    label_container = BoxLayout(orientation="vertical", spacing=100, size_hint_x=1, size_hint_y=None)
     label_container.bind(minimum_height=label_container.setter('height'))
-
-
+    if "link" in kwargs:
+        link=kwargs.pop("link")
+        label_container.add_widget( Label(text="\n", text_size=(800, None)))
+        label_container.add_widget(link)
     scroll_view = ScrollView(size_hint=(1, 1))
 
-    # label = Label(text=msg, text_size=(400, None))
-    # set_font(label)
-    # label.color = (1, 1, 1, 1)
-    # label.font_size = font_size
-    # label.font_halign ="left"
-    #label_container.add_widget(label)
 
-    title = "\n" + title
+
     lines = title.splitlines()
     for l in lines:
 
@@ -243,15 +239,17 @@ def message_popup(msg=None,picture=None):
 
         label = Label(text=l, text_size=(800, None))
         set_font(label)
-        #label.color = (1, 1, 1, 1)
+        # label.color = (1, 1, 1, 1)
         label.font_size = font_size+2
         label.font_halign = "left"
         label_container.add_widget(label)
 
-    if not picture is None:
-        im=Image(source=picture,size_hint=(1, None), size=(400, 1000))
-
-        label_container.add_widget(im)
+    if len(args) > 0:
+        for tem in args:
+            label_container.add_widget(tem)
+    if len(kwargs) > 0:
+        for item in kwargs.values():
+            label_container.add_widget(item)
 
     scroll_view.add_widget(label_container)
     contex.add_widget(scroll_view)
@@ -263,10 +261,6 @@ def message_popup(msg=None,picture=None):
     button.on_press = lambda: popup.dismiss()
     popup.open()
     return popup
-
-
-
-
 
 
 class MyApp(App):

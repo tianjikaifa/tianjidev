@@ -12,12 +12,9 @@
 import json
 import os
 
+from tianji.config.json_module import yue_xing_biao
 from tianji.proj_config import my_dir
 
-json_file = os.path.join(my_dir, "data","jsonfile", "yue_xing_biao.json")
-yue_xing_biao = None
-with open(json_file, "r", encoding="utf-8") as f:
-    yue_xing_biao = json.load(f)
 
 
 

@@ -8,12 +8,12 @@
 """
 根据命宫位置和年干位置确定起运年分和五行局
 """
-import json
-import os
-
-from tianji.proj_config import my_dir
-
 # ----------------------------------------------------------------------------------------------------------------------
+
+
+
+from tianji.config.json_module import wu_xing_jv_biao
+
 
 wu_xing_list = {
     2: "水二局",
@@ -182,9 +182,7 @@ class Wu_Xing:
         #     }
         # }
 
-        json_file = os.path.join(my_dir, "data","jsonfile", "wu_xing_jv_biao.json")
-        with open(json_file, "r", encoding="utf-8") as f:
-            self.wu_xing_jv_biao = json.load(f)
+        self.wu_xing_jv_biao=wu_xing_jv_biao
         wuxing=self.wu_xing_jv_biao.get(self.nian_gan).get(self.ming_gong)
         star_age=-100
         for k,v in wu_xing_list.items():

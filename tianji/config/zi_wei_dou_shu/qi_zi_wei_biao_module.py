@@ -14,12 +14,10 @@
 import json
 import os
 
+from tianji.config.json_module import zi_wei_biao
 from tianji.proj_config import my_dir
 
-json_file = os.path.join(my_dir, "data","jsonfile",  "zi_wei_biao.json")
-zi_wei_biao = None
-with open(json_file, "r", encoding="utf-8") as f:
-    zi_wei_biao = json.load(f)
+
 
 # zi_wei_biao = {
 #     1: {
