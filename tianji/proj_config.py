@@ -18,8 +18,9 @@ my_dir = os.path.dirname(__file__)
 
 # ext_dir = os.path.join(os.environ['EXTERNAL_STORAGE'], "tianji","data", "user_info") if kivy.platform == "android" else os.path.join(os.path.dirname(__file__), "data", "user_info")
 ext_dir = os.path.join(os.path.dirname(__file__), "data", "user_info")
+luyin_dir = os.path.join(os.path.dirname(__file__), "data", "luyin_files")
 
-version_code = "1.2.2"
+version_code = "1.3.1"
 users_db_path = os.path.join(os.path.dirname(__file__), "data", "user_info", "user_info.db")
 
 if __name__ == '__main__':

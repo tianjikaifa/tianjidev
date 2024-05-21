@@ -79,6 +79,7 @@ class UserItem:
                           ''')
         # cursor.execute("SELECT id,name, birthday, gender, save_time FROM users;")
         cursor.execute("SELECT id,name, birthday, gender, save_time FROM users ORDER BY id DESC ;")
+
         for item in cursor:
             # print(item)
             info = UserItem(
@@ -88,8 +89,14 @@ class UserItem:
                 gender=item[3],
                 save_time=item[4])
             user_infos.append(info)
+
         cursor.close()
         conn.close()
+        # 应群友的建议，删除后的记录数量应该与当前记录数一致
+        i=len(user_infos)
+        for user in user_infos:
+            user.label_id=i
+            i-=1
         return user_infos
 
 
@@ -146,7 +153,7 @@ class UserListDialogScreen(MyScreen):
         # save_day = Button(text=f"{info.save_time}", size_hint=(self.item_height * 5, self.item_height))
         # delete = Button(text="删除", size_hint=(self.item_height * 2, self.item_height))
 
-        id = Button(text=f"{info.id}", size_hint=(None, None), size=(100, 50))
+        id = Button(text=f"{info.label_id}", size_hint=(None, None), size=(100, 50))
         name = Button(text=f"{info.name}", size_hint=(None, None), size=(200, 50))
         gender = Button(text=f"{info.gender}", size_hint=(None, None), size=(100, 50))
         birthday = Button(text=f"{info.birthday}", size_hint=(None, None), size=(200, 50))

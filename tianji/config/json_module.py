@@ -115,4 +115,8 @@ json_file = os.path.join(my_dir, "data", "jsonfile", "gua_seq_name.json")
 with open(json_file, "r", encoding="utf-8") as f:
     gua_seq_name = json.load(f)
 
+
+json_file = os.path.join(my_dir, "data", "jsonfile", "color_config.json")
+with open(json_file, "r", encoding="utf-8") as f:
+    color_config = json.load(f)
 # endregion

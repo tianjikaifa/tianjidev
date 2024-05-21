@@ -8,26 +8,72 @@
 """
 模块说明
 """
+import datetime
+import json
 # ----------------------------------------------------------------------------------------------------------------------
 
-import kivy
+import os.path
 from kivy.graphics import Line, Color
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.image import Image
 from kivy.uix.label import Label
-
-from tianji.config.json_module import gua_dict
-from tianji.proj_config import version_code
+from kivy.uix.button import Button
+from tianji.config.json_module import gua_dict, gua_zu_he_biao, gua_seq_name
+from tianji.config.xiao_liu_ren.pai_liu_ren import pai_liu_ren
+from tianji.config.zi_wei_dou_shu.pan_time_module import cal_jianchu
+from tianji.proj_config import version_code, my_dir
 from tianji.ui.BaseUI import MyScreen
+from tianji.ui.DialogScreenUI import message_popup
 from tianji.ui.FontSetModule import set_font
-from tianji.ui.UserUI import MingPanDate
+from tianji.ui.UserUI import MingPanDate, CenteredTextInput
 from tianji.config.zi_wei_dou_shu.ming_pan_module import Gong
 from tianji.ui.GongScreenUI import GongScreen
 from tianji.ui.GuaScreenUI import GuaUI
+from tianji.ui.screen_manager_module import screen_manager
+from lunar_python import Lunar, Solar
 
 
-# # 防止右键按下出点点污染屏幕
-# from kivy.config import Config
-# Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
+# 主屏幕
+class APPScreen(MyScreen):
+
+    def __init__(self, app, **kwargs):
+        super().__init__(**kwargs)
+
+        root = BoxLayout(orientation="vertical")
+        root.spacing = 20
+        root.padding = 20
+        d = datetime.datetime.now()
+        lu = Lunar.fromSolar(Solar(d.year, d.month, d.day, d.hour, d.minute, d.second))
+        sizhu = "".join(lu.getBaZi())
+        # txt=f"日历{d}\n农历{lu}  {cal_jianchu(lu)}日\n\n{'  '.join(sizhu[::2])}\n{'  '.join(sizhu[1::2])}"
+        txt = f"日历{d}\n农历{lu}  \n\n{'  '.join(sizhu[::2])}\n{'  '.join(sizhu[1::2])}"
+        l1 = Label(text=txt)
+        l1.color = (0, 0, 0, 1)
+        set_font(l1)
+
+        root.add_widget(l1)
+        # root.add_widget(l2)
+        root.add_widget(self.make_item("紫薇斗数", "main_screen"))
+        root.add_widget(self.make_item("阳宅64卦", "yang_zhai_screen"))
+        # root.add_widget(self.make_item("失物寻找", "shi_wu_screen"))
+        root.add_widget(self.make_item("小六壬", "xiao_liu_ren_screen"))
+        root.add_widget(Label())
+
+        self.add_widget(root)
+
+    def make_item(self, name, to_window_name):
+        btn = Button(text=name, size_hint=(1, 0.168))
+        set_font(btn)
+        btn.color = (0, 0, 0, 1)
+        btn.on_press = self.to_screen_envt(to_window_name)
+
+        return btn
+
+    def to_screen_envt(self, screen_name):
+        def ff(*args, **kwargs):
+            screen_manager.current = screen_name
+
+        return ff
 
 
 # 紫薇斗数部分
@@ -35,7 +81,7 @@ class AppDouShuScreen(MyScreen):
 
     def __init__(self, app, **kwargs):
         super().__init__(**kwargs)
-        self.exit_fun = app.stop
+        self.exit_fun = app.app_ui
         self.app = app
         self.settings = app.open_settings
         self.__size_hint = (1.30, 1)
@@ -150,9 +196,9 @@ class AppDouShuScreen(MyScreen):
             old = None
             mid_shui_ping.add_widget(self.user)
         # 添加流年卦显示组件
-        tt=BoxLayout(orientation="vertical", size_hint=(2 - 0.05 - self.__size_hint[0], 1))
-        l=Label(size_hint=(1, 0.1),text=f"紫易哲学\n   V{version_code}")
-        gua_ui=GuaUI(self.guas, size_hint=(1, 1))
+        tt = BoxLayout(orientation="vertical", size_hint=(2 - 0.05 - self.__size_hint[0], 1))
+        l = Label(size_hint=(1, 0.1), text=f"紫易哲学\n   V{version_code}")
+        gua_ui = GuaUI(self.guas, size_hint=(1, 1))
         set_font(l)
         tt.add_widget(gua_ui)
         tt.add_widget(l)
@@ -184,7 +230,7 @@ class AppDouShuScreen(MyScreen):
         w = (self.width - 2 * self.pad) // 8
         scale = self.width / self.tl.width
 
-        h = (self.height - 2 * self.pad ) // 8
+        h = (self.height - 2 * self.pad) // 8
 
         self.gong_line = {
             "子": [
@@ -276,7 +322,7 @@ class AppDouShuScreen(MyScreen):
 
             return p1, p2
 
-        if len(self.lines) == 4 and len(self.draw_lines) == 4  :
+        if len(self.lines) == 4 and len(self.draw_lines) == 4:
             self.draw_lines[0].points = get_points(self.lines[0])
             self.draw_lines[1].points = get_points(self.lines[1])
             self.draw_lines[2].points = get_points(self.lines[2])
@@ -295,8 +341,8 @@ class AppDouShuScreen(MyScreen):
                 pai_pan_bazi.append(item)
             pai_pan_bazi[0] = ming_pan.pan_time.current_year_ntg
             pai_pan_bazi[1] = ming_pan.pan_time.current_year_ndz
-            self.user.user_info.get("排盘八字").text = "".join(pai_pan_bazi)
-            self.user.user_info.get("四柱").text = "".join(ming_pan.ba_zi)
+            self.user.user_info.get("排盘四柱").text = "".join(pai_pan_bazi)
+            self.user.user_info.get("节气四柱").text = "".join(ming_pan.ba_zi)
             self.user.user_info.get("五行局").text = ming_pan.wu_xing_jv_name
             self.user.user_info.get("阴阳男女").text = f"{ming_pan.yin_yang}{ming_pan.gender}"
             self.user.user_info.get("命主星").text = self.ming_zhu_xing
@@ -330,4 +376,159 @@ class AppDouShuScreen(MyScreen):
             if child == self.user:
                 continue
             self.remove_widget(child)
-            child=None
+            child = None
+
+
+# 阳宅部分
+class YnagZhaiScreen(MyScreen):
+
+    def __init__(self, app, **kwargs):
+        super().__init__(**kwargs)
+        items = ["乾", "兑", "离", "震", "巽", "坎", "艮", "坤"]
+        root = BoxLayout(orientation="vertical")
+        title = BoxLayout(orientation="horizontal")
+        root.add_widget(title)
+        title.add_widget(Label())
+        for name in items:
+            l = Label(text=name)
+            set_font(l)
+            title.add_widget(l)
+
+        for shang_gua in items:
+            root.add_widget(self.make_item(shang_gua))
+        r_button = Button(text="返回", size_hint=(1, 0.5))
+        set_font(r_button)
+        r_button.on_press = app.app_ui
+
+        root.add_widget(r_button)
+        self.add_widget(root)
+
+    def make_item(self, shang_gua_ming):
+        items = ["乾", "兑", "离", "震", "巽", "坎", "艮", "坤"]
+        root = BoxLayout(orientation="horizontal")
+        l = Label(text=shang_gua_ming)
+        set_font(l)
+        root.add_widget(l)
+        for xia_gua in items:
+            root.add_widget(self.make_gua_button(shang_gua_ming, xia_gua))
+
+        return root
+
+    def make_gua_button(self, shang_gua, xia_gua):
+        name = gua_zu_he_biao.get(xia_gua).get(shang_gua)
+        button = Button(text=name)
+        set_font(button)
+        button.color = (0, 0, 0, 1)
+        button.background_color = (1, 1, 1, 1)
+
+        button.on_press = self.make_button_event(name)
+        return button
+
+    def make_button_event(self, name):
+        def event(*args, **kwargs):
+            picture1 = os.path.join(my_dir, "data", "gua_picture", "jin", f"{gua_seq_name.get(name)}.jpg")
+            picture2 = os.path.join(my_dir, "data", "gua_picture", "gu", f"{gua_seq_name.get(name)}.jpg")
+
+            im1 = Image(source=picture1, size_hint=(1, None), size=(400, 800))
+            im2 = Image(source=picture2, size_hint=(1, None), size=(400, 1200))
+            message_popup(f"\n{name}\n{gua_dict.get(name).get('阳宅')}", im1, im2)
+
+        return event
+
+
+# 找东西
+class ShiWuScreen(MyScreen):
+
+    def __init__(self, app, **kwargs):
+        super().__init__(**kwargs)
+
+
+class LiuRenScreen(MyScreen):
+
+    def __init__(self, app, **kwargs):
+        super().__init__(**kwargs)
+        self.label_widht = 0.12
+        root = BoxLayout(orientation="vertical")
+        root.spacing = 20
+        root.padding = 20
+        # d = datetime.datetime.now()
+        # lu = Lunar.fromSolar(Solar(d.year, d.month, d.day, d.hour, d.minute, d.second))
+        # sizhu = "".join(lu.getBaZi())
+        # txt = f"日历{d}\n农历{lu}  \n{'  '.join(sizhu[::2])}\n{'  '.join(sizhu[1::2])}"
+        # l1 = Label(text=txt, size_hint=(1, 0.1), padding=20)
+        # l1.color = (0, 0, 0, 1)
+        # set_font(l1)
+        #
+        # root.add_widget(l1)
+        root.add_widget(self.create_content())
+        r_button = Button(text="返回", size_hint=(1, 0.05))
+        set_font(r_button)
+        r_button.on_press = app.app_ui
+
+        root.add_widget(r_button)
+
+        self.add_widget(root)
+
+    def create_content(self):
+        root = BoxLayout(orientation="vertical")
+        root.spacing = 20
+        root.padding = 20
+        d = datetime.datetime.now()
+        day_info = f"{d.year}-{d.month}-{d.day}-{d.hour}"
+
+        root.add_widget(self.make_input_item("时间(新历)", day_info, "年-月-日-小时如 2024-01-01-19"))
+
+        self.result_label = Label(text="\n\n\n\n", size_hint=(1, 0.5))
+        set_font(self.result_label)
+        root.add_widget(self.result_label)
+        root.add_widget(Label( ))
+
+        return root
+
+    def make_input_item(self, item_type, default_value=None, hint_text=None):
+
+        label = Label(text=f"{item_type}: ", size_hint=(0.2, 0.1))
+        input = CenteredTextInput(multiline=False, size_hint=(0.8, 0.5))
+        if not hint_text is None:
+            input.hint_text = hint_text
+        if not default_value is None:
+            input.text = default_value
+
+        button = Button(text="计算", size_hint=(0.2, 0.5))
+        button.on_press=self.press_enevt(input)
+
+        set_font(label, input,button)
+
+        root = BoxLayout(orientation="vertical",size_hint=(1, 0.13))
+        sub = BoxLayout(orientation="horizontal")
+        sub.add_widget(input)
+        sub.add_widget(button)
+
+        root.add_widget(label)
+        root.add_widget(sub)
+        return root
+
+    def press_enevt(self,input):
+        def ff(*args,**kwargs):
+            items=input.text.split("-")
+            y=int(items[0])
+            m=int(items[1])
+            d=int(items[2])
+            h=int(items[3])
+            d=datetime.datetime(y,m,d,h)
+            res=pai_liu_ren(date=d)
+            self.result_label.text=f"""
+            结果             {res.get("时令")}             闰X月按X月算）
+            
+            {res.get("月令")}    ==>    {res.get("日令")}     ==>     {res.get("时令")} 
+            
+            
+            
+            农历 {res.get("时间")}
+            {'  '.join(res.get("八字")[::2])}
+            {'  '.join(res.get("八字")[1::2])}
+            """
+
+
+
+        return ff

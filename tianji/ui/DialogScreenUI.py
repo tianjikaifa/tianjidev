@@ -234,9 +234,6 @@ def message_popup(msg=None, *args, **kwargs):
     lines = title.splitlines()
     for l in lines:
 
-        if l.strip() == "\n":
-            continue
-
         label = Label(text=l, text_size=(800, None))
         set_font(label)
         # label.color = (1, 1, 1, 1)

@@ -80,18 +80,6 @@ class Pan:
         d = today.day
         y, md, d = PanTime.solar_to_lunar(y, m, d)
         age = y - self.pan_time.nian + 1 # 虚岁
-        # y = today.year - self.pan_time.xin_li_y + 1
-        # if today.month < self.pan_time.xin_li_m:
-        #     return y - 1
-        # else:
-        #     if today.month == self.pan_time.xin_li_m:
-        #         if today.day < self.pan_time.xin_li_d:
-        #             return y - 1
-        #         else:
-        #             if today.day == self.pan_time.xin_li_d:
-        #                 if today.hour < self.pan_time.shi:
-        #                     return y - 1
-
         return age
 
     def append_start(self, location, star):

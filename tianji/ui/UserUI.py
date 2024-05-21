@@ -45,6 +45,9 @@ if not os.path.exists(dir_path):
     os.makedirs(dir_path)
 
 log = Logger(os.path.join(dir_path, "UserUI.log")).logger
+# 记录最后一次修改的是农历还是日历
+last_editd = "农历"
+
 
 # 单选框
 class RadioButton(CheckBox):
@@ -53,25 +56,35 @@ class RadioButton(CheckBox):
             return
         super(RadioButton, self)._do_press()
 
+
 # 文本框
 class CenteredTextInput(TextInput):
     def __init__(self, **kwargs):
+        self.date_type = kwargs.pop("date_type", None)
         super(CenteredTextInput, self).__init__(**kwargs)
-        self.bind(size=self._update_padding)
+        self.bind(size=self._update_padding,on_touch_up =self.on_activate)
+
         self.multiline = False  # 确保是单行输入
+
+    def on_activate(self,*args,**kwargs):
+        global last_editd
+        if not self.date_type is None:
+            last_editd = self.date_type
+        return True  #阻止事件继续向下触发
 
     def _update_padding(self, instance, value):
         # 计算垂直居中的padding
         self.padding = (self.height - self.line_height) / 2
 
+
 # 超链接标签
 class HyperlinkLabel(Label):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.url=  'https://tianjikaifa.github.io/-/'
+        self.url = 'https://tianjikaifa.github.io/-/'
         hyperlink_text = '[color=#0000FF][ref=visit_app_com]打开[/ref][/color]'
 
-        self.text =self.url+ hyperlink_text
+        self.text = self.url + hyperlink_text
         self.markup = True  # 允许使用文本标记
         self.bind(on_ref_press=self.on_hyperlink_press)
         set_font(self)
@@ -79,7 +92,6 @@ class HyperlinkLabel(Label):
 
     def on_hyperlink_press(self, instance, ref):
         if ref == 'visit_app_com':
-
             webbrowser.open(self.url)
 
 
@@ -95,7 +107,7 @@ class MingPanDate(BoxLayout):
         # self.label_widht = 70
         self.button_height = 1
         self.button_widht = 0.24
-        self.label_widht = 0.22
+        self.label_widht = 0.3
         self.user_info_dir = ext_dir  #
         self.pai_pan = None  # 排盘委托方法
         self.pan_windows = pan_windows  # AppDouShuScreen 对象
@@ -122,8 +134,8 @@ class MingPanDate(BoxLayout):
         input_items.add_widget(self.make_input_item("姓名"))
         input_items.add_widget(self.make_input_item("日历"))
         input_items.add_widget(self.make_input_item("农历"))
-        input_items.add_widget(self.make_input_item("四柱"))
-        input_items.add_widget(self.make_input_item("排盘八字"))
+        input_items.add_widget(self.make_input_item("节气四柱"))
+        input_items.add_widget(self.make_input_item("排盘四柱"))
         input_items.add_widget(gender_select)
         user_bazi_info = GridLayout(size_hint=(0.8, user_bazi_info_hint_height), spacing=root.spacing)
         if kivy.platform == "android" or kivy.platform == "ios":
@@ -193,11 +205,11 @@ class MingPanDate(BoxLayout):
                                 on_press=self.pan_windows.settings)
         # 保存到数据库
         save_button = Button(size_hint=(self.button_widht, self.button_height), text='历史',
-                                on_press=self.save_user_list)
+                             on_press=self.save_user_list)
         guan_yu_button = Button(size_hint=(self.button_widht, self.button_height), text='说明',
                                 on_press=self.about)
         set_font(pai_pan_button, bao_cun_button, da__kai_button, cun_tu_button, qing_li_button, tui_chu_button,
-                 guan_yu_button, she_zhi_button,save_button)
+                 guan_yu_button, she_zhi_button, save_button)
 
         user_operation.cols = 2
         user_operation.add_widget(bao_cun_button)
@@ -255,8 +267,12 @@ class MingPanDate(BoxLayout):
         root = BoxLayout(orientation="horizontal")
         label = Label(text=f"{item_type}: ", size_hint_x=self.label_widht)  # =(self.label_widht,self.text_height))
         label.text_align = "left"
-        input = CenteredTextInput(multiline=False,
-                                  size_hint_x=1 - self.label_widht)  # ,  size_hint=(1-self.label_widht,self.text_height))
+        if item_type == "日历" or item_type == "农历":
+            input = CenteredTextInput(multiline=False,
+                                      size_hint_x=1 - self.label_widht,date_type=item_type)  # ,  size_hint=(1-self.label_widht,self.text_height))
+        else:
+            input = CenteredTextInput(multiline=False,
+                                      size_hint_x=1 - self.label_widht)  # ,  size_hint=(1-self.label_widht,self.text_height))
         root.add_widget(label)
         root.add_widget(input)
         self.user_info[item_type] = input
@@ -272,9 +288,9 @@ class MingPanDate(BoxLayout):
                 input.hint_text = "2000-01-01-01"
                 input.text = "2000-01-01-01"
             else:
-                input.hint_text =  "农历有输入则以农历日期进行排列"
+                input.hint_text = "农历有输入则以农历日期进行排列"
                 input.text = ""
-                input.foreground_color = (0,0,0,1)
+                input.foreground_color = (0, 0, 0, 1)
 
         return root
 
@@ -443,14 +459,15 @@ class MingPanDate(BoxLayout):
             "nong_li_time": self.user_info.get("农历").text,
         }
         now = datetime.datetime.now()
-        user_info=UserItem(
+        user_info = UserItem(
             name=self.user_info.get("姓名").text,
             birthday=self.user_info.get("农历").text,
             gender=self.get_gender(),
             save_time=str(now),
         )
         user_info.save_to_db()
-        message_popup(f"\n\n 保存成功 \n{user_info.name} \n{user_info.birthday}\n{user_info.gender}\n{user_info.save_time}")
+        message_popup(
+            f"\n\n 保存成功 \n{user_info.name} \n{user_info.birthday}\n{user_info.gender}\n{user_info.save_time}")
         # 生成文件名称
         # filename = os.path.join(self.user_info_dir, f"{save_info.get('name')}.json")
         # # f"{save_info.get('name')}_{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}.json")
@@ -497,7 +514,7 @@ class MingPanDate(BoxLayout):
             # self.pan_windows.export_to_png(file_name, size=self.pan_windows.size, dpi=300, quality=100)
 
     def clear_user_info(self, button, *args, **kwargs):
-        self.user_info.get("姓名").text = ""
+        self.user_info.get("姓名").text = "张三"
         self.user_info.get("日历").text = ""
         self.user_info.get("农历").text = ""
         self.pai_pan()
@@ -517,8 +534,8 @@ class MingPanDate(BoxLayout):
 使用方法
     在农历栏输入自己的出生年月日时，用-进行分隔，然后点击排盘即可。
     例如如2000年1月1日2点55分，需要输入的是2000-1-1-2,不需要输入分钟数
-    如果不知道自己的农历生日，可以输入公历生日，但是需要先点击清理按钮或者删除掉农历输入框中的文本。
-每一个星耀都可以点击查看它的属性信息
+    如果不知道自己的农历生日，可以输入公历生日进行排盘，日历农历有一个就行。
+每一个星耀都可以点击查看它的属性信息,后续看看情况，如果需要的话可以添加每个星耀的详情信息
 年龄使用的是虚岁，以正月初一为岁与岁的分界线
 三方四正线可以点击每个宫和对应的内脏行切换，如亥或者三焦，将切换为亥宫的三方四正，排盘之后默认显示命宫的三方四正
 关于先天卦和后天卦可以点击进行查看倪师在视频里对这个卦的先天后天批注，以及对应的卦图，但是请注意，一切均来自卦图，
@@ -542,23 +559,30 @@ class MingPanDate(BoxLayout):
 此字体软件根据 SIL 开放字体许可证 (SIL Open Font License) 1.1 版授权。
 此许可证可在 https://fonts.google.com/noto/specimen/Noto+Sans+SC 上获得。
         """
-        picture = os.path.join(my_dir,"data","picture","qun.jpg")
+        picture = os.path.join(my_dir, "data", "picture", "qun.jpg")
         im = Image(source=picture, size_hint=(1, None), size=(400, 800))
         link = HyperlinkLabel()
 
         message_popup(txt, im, link=link)
 
     def start(self, button, *args, **kwargs):
+        global last_editd
 
         if self.pai_pan is None:
             message_popup("尚未传递排盘方法")
             return
 
-        if not self.user_info.get("农历").text == "":
+        if last_editd == "农历":
             ming_pan_time = self.get_nong_li_pan_time()
             # print("农历")
         else:
             ming_pan_time = self.get_ri_li_pan_time()
+
+        # if not self.user_info.get("农历").text == "":
+        #     ming_pan_time = self.get_nong_li_pan_time()
+        #     # print("农历")
+        # else:
+        #     ming_pan_time = self.get_ri_li_pan_time()
 
         if not ming_pan_time is None:
             gender = self.get_gender()
@@ -570,8 +594,8 @@ class MingPanDate(BoxLayout):
             count = 0
             for gua in res:
                 count += 1
-                liu_yues=get_liu_yue_gua(gua)
-                gua.liu_yues=liu_yues
+                liu_yues = get_liu_yue_gua(gua)
+                gua.liu_yues = liu_yues
                 user_liu_nian_guas[count] = gua
             p.liu_nian_guas = user_liu_nian_guas  # 将流年卦增加到排盘上
             self.pai_pan(p)
@@ -583,30 +607,30 @@ class MingPanDate(BoxLayout):
             self.pan_windows.user.user_info.get("性别").get(gender).active = True
             self.pan_windows.user.user_info.get("先天卦").text = xian_tian_gua.name
             self.pan_windows.user.user_info.get("后天卦").text = hou_tian_gua.name
-            self.pan_windows._update_rect(None,None)
+            self.pan_windows._update_rect(None, None)
         else:
             return
 
     def save_user_list(self, *args, **kwargs):
-        users_ui=UserListDialogScreen(event=self.open_db_item)
+        users_ui = UserListDialogScreen(event=self.open_db_item)
         users_screen.clear_widgets()
         users_screen.add_widget(users_ui)
-        screen_manager.current="users_screen"
+        screen_manager.current = "users_screen"
 
-
-    def open_db_item(self,info):
-        def ff(*args,**kwargs):
+    def open_db_item(self, info):
+        def ff(*args, **kwargs):
             self.user_info.get("性别").get(info.gender).active = True
             self.user_info.get("农历").text = info.birthday
             self.user_info.get("日历").text = ""
             self.user_info.get("姓名").text = info.name
-            screen_manager.current="main_screen"
+            screen_manager.current = "main_screen"
             self.start(None)
+
         return ff
 
-    def test(self,*args, **kwargs):
-        for year in range(1840,3000):
-            for m in range(1,12):
-                self.user_info.get("农历").text=f"{year}-{m}-01-05"
+    def test(self, *args, **kwargs):
+        for year in range(1840, 3000):
+            for m in range(1, 12):
+                self.user_info.get("农历").text = f"{year}-{m}-01-05"
                 self.start(None)
             print(year)

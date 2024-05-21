@@ -95,7 +95,7 @@ class PanTime:
         jieqi1 = Lunar.fromYmd(self.nian, 8, 1).getJieQiTable()
         chushengri = self.day_info.getSolar()
         summer_before = chushengri.isBefore(jieqi1.get("夏至"))
-        #print(chushengri,jieqi1.get("夏至"))
+        # print(chushengri,jieqi1.get("夏至"))
         return summer_before
 
     @staticmethod
@@ -117,7 +117,22 @@ class PanTime:
         return y, m, d
 
 
+class JianChu:
+    def __init__(self):
+        self.__items = ["建", "除", "满", "平", "定", "执", "破", "危", "成", "收", "开", "闭"]
+        self.index = 0
+
+    def get_yue_jian(self):
+
+        pass
+
+    def next(self):
+        self.index += 1
+        if self.index > 11:
+            self.index = 0
+        return self.__items[self.index]
 
 
-
-
+# 计算当天的农历日期
+def cal_jianchu(lunar_day):
+    pass

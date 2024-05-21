@@ -6,7 +6,7 @@
 # @File    : main.py
 # @Date    : 2023/11/12 
 """
-模块说明
+程序启动入口
 """
 import os
 import traceback
@@ -15,14 +15,11 @@ from kivy.lang import Builder
 from kivy.app import App
 
 import tianji.proj_config   as myapp_config
-from tianji.ui.AppScreenUI import AppDouShuScreen
+from tianji.ui.AppScreenUI import AppDouShuScreen, APPScreen, YnagZhaiScreen, ShiWuScreen, LiuRenScreen
 from tianji.ui.DialogScreenUI import YesNoPopup
 from tianji.ui.logModule import Logger
-from tianji.ui.screen_manager_module import main_screen, screen_manager
-
-
-
-
+from tianji.ui.screen_manager_module import main_screen, screen_manager, APP_screen, yang_zhai_screen, shi_wu_screen, \
+    app_ui, xiao_liu_ren_screen
 
 Builder.load_string('''
 <MyScreen>
@@ -67,13 +64,15 @@ class PhoneApp(App):
         # app = AppDouShuScreen(self)
         #
         # return app
-
+        # 配置程序的数据库存储位置
         myapp_config.users_db_path=os.path.join(self.user_data_dir,"user_info.db")
         self.screen_manager=screen_manager
+        self.app_ui=app_ui
+        APP_screen.add_widget(APPScreen(self))
         main_screen.add_widget(AppDouShuScreen(self))
-        #main_screen.add_widget(AppYiJingScreen(self))
-        # if kivy.platform == "android"  :
-        #     request_permissions([Permission.READ_EXTERNAL_STORAGE,Permission.WRITE_EXTERNAL_STORAGE])
+        yang_zhai_screen.add_widget(YnagZhaiScreen(self))
+        shi_wu_screen.add_widget(ShiWuScreen(self))
+        xiao_liu_ren_screen.add_widget(LiuRenScreen(self))
         return self.screen_manager
 
 
@@ -85,11 +84,19 @@ class PhoneApp(App):
 
 
 """
-
-# 调整了一下，发现和天纪软件有部分对不上，不知道为什么，暂时先不做了，考上公务员之后也许就有时间继续完成这个软件了，那时我一定继续完成它
-# 上次起课问该不该继续完成这个软件得到的结果是地雷复，我看到的是君子之道始复，我一个人难以完成，需要合众人齐心协力，但是我又没办法，所以只能先放下后面有时间了再搞。
-这下是天水讼了，先给自己用吧
+源码只有一套，理论上可以编译出任何平台需要的软件，只要该平台支持python 
+打包exe安装包，然后再用Inno Setup Compiler 制作安装包
  pyinstaller .\main.py 
+linux下 打包apk安装包，relase 版本需要app签名认证，弄这个又需要有个公司执照，太麻烦所以算了
+ buildozer -v  android debug
+
+
+
+加一个现有批注笔记的功能
+同时增加一套现有体系的星辰亮度表 ，支持设置旧版本和新版本的亮度 
+需要做一个失物寻找的功能   
+
+
 
 """
 
